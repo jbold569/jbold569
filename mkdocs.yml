@@ -1,0 +1,29 @@
+site_name: Jason Bolden
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.top
+  palette:
+    - primary: blue
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+nav:
+  - Home: index.md
+  - About: about.md
+  #- events: events/readme.md
+  #- blog: blog/readme.md
+  #- projects: projects/readme.md
+extra:
+  social:
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/jason-bolden-37b55443/
+      name: Jason Bolden on LinkedIn
