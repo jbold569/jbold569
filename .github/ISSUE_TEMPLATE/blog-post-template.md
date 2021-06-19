@@ -10,3 +10,4 @@ assignees: ''
 title: <TITLE>
 type: <tech, insight, idea>
 publish_date: <dynamic, dd-mm-yy>
+summary: <brief summary of post>
