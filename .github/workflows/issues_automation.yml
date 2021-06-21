@@ -19,7 +19,7 @@ jobs:
         env:
           BLOG_CONFIG: ${{github.event.issue.body}}
         run: |
-          echo ${{env.BLOG_CONFIG}}
+          echo body: ${{env.BLOG_CONFIG}}
 
       # - name: Setup Python
       #   uses: actions/setup-python@v2
