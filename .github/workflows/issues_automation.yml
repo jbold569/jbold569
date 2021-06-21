@@ -1,0 +1,39 @@
+name: Orchestrate Issue triggered workflows based on labels
+on:
+  issues:
+    types: [assigned]
+
+jobs:
+  issue_assigned:
+    name: Issue Assigned
+    
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8]
+
+    steps:
+      - name: Blog Post Issue
+        if: ${{github.event.issue.label.name == 'documentation.blog'}}
+        uses: actions/checkout@v2
+        env:
+          BLOG_CONFIG: ${{github.event.issue.body}}
+        run: |
+          echo ${{BLOG_CONFIG}}
+          
+      # - name: Setup Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: ${{ matrix.python-version }}
+      
+      # - name: Install Dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install -r requirements.txt 
+      
+      # - name: Deploy docs
+      #   uses: mhausenblas/mkdocs-deploy-gh-pages@master
+      #   # Or use mhausenblas/mkdocs-deploy-gh-pages@nomaterial to build without the mkdocs-material theme
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     CONFIG_FILE: mkdocs.yml
