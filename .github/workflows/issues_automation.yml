@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Blog Post Issue
-        if: ${{github.event.issue.label.name == 'documentation.blog'}}
+        if: ${{github.event.issue.labels[0].name == 'documentation.blog'}}
         #uses: actions/checkout@v2
         env:
           BLOG_CONFIG: ${{github.event.issue.body}}
