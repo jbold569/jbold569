@@ -15,12 +15,12 @@ jobs:
     steps:
       - name: Blog Post Issue
         if: ${{github.event.issue.label.name == 'documentation.blog'}}
-        uses: actions/checkout@v2
+        #uses: actions/checkout@v2
         env:
           BLOG_CONFIG: ${{github.event.issue.body}}
         run: |
           echo ${{BLOG_CONFIG}}
-          
+
       # - name: Setup Python
       #   uses: actions/setup-python@v2
       #   with:
