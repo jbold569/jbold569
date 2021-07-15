@@ -1,2 +1,6 @@
 mkdocs
 mkdocs-material
+click
+jinja2
+python-slugify
+pyyaml
