@@ -27,10 +27,11 @@ jobs:
       
       - name: Checkout main and create new branch
         uses: actions/checkout@v2
-        run: |
+      
+      - run: |
           git checkout -b blog/iss${{github.event.issue.number}}
           pwd
-          
+
       # - name: Setup Python
       #   uses: actions/setup-python@v2
       #   with:
