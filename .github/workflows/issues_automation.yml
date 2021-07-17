@@ -21,6 +21,8 @@ jobs:
         run: |
           echo "${{env.BLOG_CONFIG}}" > config.yml
           cat config.yml
+          pwd
+          ls
       
       - name: Setup Python
         uses: actions/setup-python@v2
