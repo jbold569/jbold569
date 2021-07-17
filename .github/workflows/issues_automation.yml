@@ -34,6 +34,7 @@ jobs:
         run: |
           git checkout -b blog/iss${{github.event.issue.number}}
           pwd
+          cd ..
           ls
           cd profile
 
