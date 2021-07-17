@@ -1,8 +1,8 @@
 <div class="page-image">
-    <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="">
+    <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="Lisa Brewster">
     <div class="page-image-caption">
         <p>
-            <a href="">AUTHOR</a>
+            <a href="https://flic.kr/p/9NdAX1">Flickr Lisa Brewster</a>
         </p>
     </div>
 </div>
