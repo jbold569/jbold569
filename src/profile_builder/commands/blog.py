@@ -36,7 +36,7 @@ def blog(templates=None, config_file=None, output_dir=None, mkdocs_file=None, **
     def update_blog(config, publish_date: date, entry):
         try:
             config["nav"][2]["Blogs"][1][publish_date.year].insert(0, entry)
-        except KeyError as e:
+        except IndexError as e:
             log.debug(f"Adding new year to mkdocs.yml")
             config["nav"][2]["Blogs"].insert(1, {publish_date.year:[entry]})
         config.write_file()
@@ -69,7 +69,7 @@ def blog(templates=None, config_file=None, output_dir=None, mkdocs_file=None, **
         mkdocs_config = load_config(config_file=mkdocs_file)
         update_blog(mkdocs_config, config['publish_date'], {config['title']: str(entry)})
         
-    #except Exception as e:
-    #    log.warning(f"Error reading template '{template_file}': {e}")    
+    except Exception as e:
+        log.warning(f"Error reading template '{template_file}': {e}")    
     except Error as e:
         print(e)
