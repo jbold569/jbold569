@@ -33,7 +33,6 @@ jobs:
       - name: Create and Checkout New Branch
         run: |
           git checkout -b blog/iss${{github.event.issue.number}}
-          cd profile
 
       - name: Install Dependencies
         run: |
@@ -42,8 +41,9 @@ jobs:
       
       - name: Generate Blog Entry
         run: |
+          ls
           cd src
-          python -m profile_builder blog -t ./templates -o ../docs/blog -c ../../config.yml -v
+          python -m profile_builder blog -t ./templates -o ../docs/blog -c ../config.yml -v
           cd ..
           git add .
           git commit -m "generated iss${{github.event.issue.number}}"
