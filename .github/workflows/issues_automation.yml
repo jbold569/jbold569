@@ -37,7 +37,7 @@ jobs:
           echo "${{github.event.issue.body}}" > config.yml
           cat config.yml
           cd src
-          python -m profile_builder blog -t ./templates -o ../docs/blog -c ../../config.yml -v
+          python -m profile_builder blog -t ./templates -o ../docs/blog -c ../config.yml -v
           cd ..
           rm config.yml
           git config user.name github-actions
