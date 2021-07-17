@@ -16,8 +16,6 @@ jobs:
 
       - name: Blog Post Issue Checkout main
         if: ${{github.event.issue.labels[0].name == 'documentation.blog'}}
-        env:
-          BLOG_CONFIG: ${{github.event.issue.body}}
         uses: actions/checkout@v2
       
       - name: Create new Branch
@@ -36,10 +34,10 @@ jobs:
       
       - name: Generate Blog Entry and Clean Up
         run: |
-          echo "${{env.BLOG_CONFIG}}" > config.yml
+          echo "${{github.event.issue.body}}" > config.yml
           cat config.yml
           cd src
-          python -m profile_builder blog -t ./templates -o ../docs/blog -c ../config.yml -v
+          python -m profile_builder blog -t ./templates -o ../docs/blog -c ../../config.yml -v
           cd ..
           rm config.yml
           git config user.name github-actions
