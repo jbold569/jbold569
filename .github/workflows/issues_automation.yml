@@ -13,6 +13,7 @@ jobs:
         python-version: [3.8]
 
     steps:
+
       - name: Blog Post Issue
         if: ${{github.event.issue.labels[0].name == 'documentation.blog'}}
         #uses: actions/checkout@v2
@@ -24,29 +25,29 @@ jobs:
           pwd
           ls
       
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{matrix.python-version}}
-      
-      - name: Checkout main
+      - name: Checkout main and create new branch
         uses: actions/checkout@v2
-      
-      - name: Create and Checkout New Branch
         run: |
           git checkout -b blog/iss${{github.event.issue.number}}
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt 
+          pwd
+          
+      # - name: Setup Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: ${{matrix.python-version}}
       
-      - name: Generate Blog Entry
-        run: |
-          ls
-          cd src
-          python -m profile_builder blog -t ./templates -o ../docs/blog -c ../config.yml -v
-          cd ..
-          git add .
-          git commit -m "generated iss${{github.event.issue.number}}"
-          git push
+
+      # - name: Install Dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install -r requirements.txt 
+      
+      # - name: Generate Blog Entry
+      #   run: |
+      #     ls
+      #     cd src
+      #     python -m profile_builder blog -t ./templates -o ../docs/blog -c ../config.yml -v
+      #     cd ..
+      #     git add .
+      #     git commit -m "generated iss${{github.event.issue.number}}"
+      #     git push
