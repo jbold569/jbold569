@@ -1,5 +1,20 @@
+<div class="page-image">
+    <img src="../img/{{ publish_date.strftime('%Y-%m-%d') }}-blog-banner.drawio.svg" alt="">
+    <div class="page-image-caption">
+        <p>
+            <a href="">AUTHOR</a>
+        </p>
+    </div>
+</div>
+
 # {{ title }}
 
-{{ publish_date }}
+{{ publish_date.strftime('%Y %b %d') }} by [Jason Bolden](../about.md)
+
 
 {{ summary }}
+
+## Objective
+## Background
+## Steps
+## Conclusion

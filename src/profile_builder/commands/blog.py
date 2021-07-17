@@ -33,10 +33,11 @@ def blog(templates=None, config_file=None, output_dir=None, mkdocs_file=None, **
         return config
 
     # add new blog to mkdocs config
-    def update_blog(config, publish_date, entry):
+    def update_blog(config, publish_date: date, entry):
         try:
-            config["nav"][2]["Blogs"][0][publish_date.year].insert(1, entry)
-        except KeyError:
+            config["nav"][2]["Blogs"][1][publish_date.year].insert(0, entry)
+        except KeyError as e:
+            log.debug(f"Adding new year to mkdocs.yml")
             config["nav"][2]["Blogs"].insert(1, {publish_date.year:[entry]})
         config.write_file()
 

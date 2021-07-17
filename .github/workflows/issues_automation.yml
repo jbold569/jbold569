@@ -21,20 +21,30 @@ jobs:
         run: |
           echo "${{env.BLOG_CONFIG}}" > config.yml
           cat config.yml
+      
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{matrix.python-version}}
+      
+      - name: Checkout main
+        uses: actions/checkout@v2
+      
+      - name: Create and Checkout New Branch
+        run: |
+          git checkout -b blog/iss${{github.event.issue.number}}
+          cd profile
 
-      # - name: Setup Python
-      #   uses: actions/setup-python@v2
-      #   with:
-      #     python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 
       
-      # - name: Install Dependencies
-      #   run: |
-      #     python -m pip install --upgrade pip
-      #     pip install -r requirements.txt 
-      
-      # - name: Deploy docs
-      #   uses: mhausenblas/mkdocs-deploy-gh-pages@master
-      #   # Or use mhausenblas/mkdocs-deploy-gh-pages@nomaterial to build without the mkdocs-material theme
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     CONFIG_FILE: mkdocs.yml
+      - name: Generate Blog Entry
+        run: |
+        cd src
+        python -m profile_builder blog -t ./templates -o ../docs/blog -c ../../config.yml -v
+        cd ..
+        git add .
+        git commit -m "generated iss${{github.event.issue.number}}"
+        git push

@@ -26,3 +26,8 @@ extra:
   - icon: fontawesome/brands/linkedin
     link: https://www.linkedin.com/in/jason-bolden-37b55443/
     name: Jason Bolden on LinkedIn
+extra_css:
+# - stylesheets/bootstrap.css
+- stylesheets/custom.css
+# extra_javascript:
+# - javascripts/bootstrap.js
