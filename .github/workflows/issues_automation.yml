@@ -14,13 +14,10 @@ jobs:
 
     steps:
 
-      - name: Blog Post Issue
+      - name: Blog Post Issue Checkout main
         if: ${{github.event.issue.labels[0].name == 'documentation.blog'}}
-        #uses: actions/checkout@v2
         env:
           BLOG_CONFIG: ${{github.event.issue.body}}
-        
-      - name: Checkout main
         uses: actions/checkout@v2
       
       - name: Create new Branch
