@@ -69,7 +69,7 @@ def blog(templates=None, config_file=None, output_dir=None, mkdocs_file=None, **
         mkdocs_config = load_config(config_file=mkdocs_file)
         update_blog(mkdocs_config, config['publish_date'], {config['title']: str(entry)})
         
-    except Exception as e:
-        log.warning(f"Error reading template '{template_file}': {e}")    
+    #except Exception as e:
+    #    log.warning(f"Error reading template '{template_file}': {e}")    
     except Error as e:
         print(e)
