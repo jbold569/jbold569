@@ -33,6 +33,8 @@ jobs:
       - name: Create and Checkout New Branch
         run: |
           git checkout -b blog/iss${{github.event.issue.number}}
+          pwd
+          ls
           cd profile
 
       - name: Install Dependencies
