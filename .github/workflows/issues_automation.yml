@@ -42,9 +42,9 @@ jobs:
       
       - name: Generate Blog Entry
         run: |
-        cd src
-        python -m profile_builder blog -t ./templates -o ../docs/blog -c ../../config.yml -v
-        cd ..
-        git add .
-        git commit -m "generated iss${{github.event.issue.number}}"
-        git push
+          cd src
+          python -m profile_builder blog -t ./templates -o ../docs/blog -c ../../config.yml -v
+          cd ..
+          git add .
+          git commit -m "generated iss${{github.event.issue.number}}"
+          git push
