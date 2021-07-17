@@ -53,6 +53,9 @@ class Config(UserDict):
                 f"Profile_Builder encountered an error parsing the configuration file: {e}"
             )
 
+    def write_file(self):
+        f = self.pop("config_file_path")
+        utils.yaml_write_file(self.data, f)
 
 def _open_config_file(config_file):
 

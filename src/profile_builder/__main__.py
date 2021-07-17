@@ -129,11 +129,12 @@ def cli():
 @click.option('-t', '--templates', type=click.Path(), help='template help', default='./templates')
 @click.option('-c', '--config', type=click.File(), help='config help', default='./config.yml')
 @click.option('-o', '--output-dir', type=click.Path(), help="output help", default='../docs/blog')
+@click.option('-m', '--mkdocs-file', type=click.File(), help="mkdocs help", default='../mkdocs.yml')
 @common_options
 # @common_config_options
-def blog_command(templates, config, output_dir, **kwargs):
+def blog_command(templates, config, output_dir, mkdocs_file, **kwargs):
     """Generate new blog according to arguments"""
-    blog.blog(templates=templates, config=config, output_dir=output_dir, **kwargs)
+    blog.blog(templates=templates, config=config, output_dir=output_dir, mkdocs_file=mkdocs_file, **kwargs)
 
 if __name__ == '__main__':
     cli()

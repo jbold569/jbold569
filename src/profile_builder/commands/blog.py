@@ -10,13 +10,14 @@ import jinja2
 
 from datetime import date
 from os.path import isdir, isfile, join, abspath
+from pathlib import Path
 
 from profile_builder.config import load_config
 from profile_builder import utils
 
 log = logging.getLogger(__name__)
 
-def blog(templates=None, config_file=None, output_dir=None, **kwargs):
+def blog(templates=None, config_file=None, output_dir=None, mkdocs_file=None, **kwargs):
     """
     Create the directory structure and templates for a new blog entry
     
@@ -31,12 +32,15 @@ def blog(templates=None, config_file=None, output_dir=None, **kwargs):
         )
         return config
 
-    try:
-        # Perform the initial build
-        config = builder()
-        publish_date = config["publish_date"] if isinstance(config["publish_date"], date) else date.today()
-        template_file = f"{templates}/blog-post-{config['type']}.md.j2"
-        dest_file = f"{output_dir}/{publish_date:%Y/%m/%d}/{slugify(config['title'])}.md"
+    # add new blog to mkdocs config
+    def update_blog(config, publish_date, entry):
+        try:
+            config["nav"][2]["Blogs"][0][publish_date.year].insert(1, entry)
+        except KeyError:
+            config["nav"][2]["Blogs"].insert(1, {publish_date.year:[entry]})
+        config.write_file()
+
+    def generate_blog(template_file, config, dest_file):
         with open(abspath(template_file), 'r', encoding='utf-8', errors='strict') as f:
             template = jinja2.Template(f.read())
             blog = template.render(config)
@@ -44,6 +48,26 @@ def blog(templates=None, config_file=None, output_dir=None, **kwargs):
                 utils.write_file(blog.encode('utf-8'), dest_file)
             else:
                 log.info(f"Template skipped: '{template_file}' generated empty output.")
+        
+    try:
+        # Perform the initial build
+        # build the .md file and write to blog directory
+        config = builder()        
+        config['publish_date'] = date.today()
+        template_file = f"{templates}/blog-post-{config['type']}.md.j2"
+        blog_filename = f"{config['publish_date']:%Y-%m-%d}-{slugify(config['title'])}.md"
+        dest_file = f"{output_dir}/{blog_filename}"
+        
+        generate_blog(template_file, config, dest_file)
+
+        # get the relative path from within the docs directory
+        p = Path(dest_file)
+        entry = Path(*p.parts[2:]) 
+
+        # Update the mkdocs.yml file nav with the new structure
+        mkdocs_config = load_config(config_file=mkdocs_file)
+        update_blog(mkdocs_config, config['publish_date'], {config['title']: str(entry)})
+        
     except Exception as e:
         log.warning(f"Error reading template '{template_file}': {e}")    
     except Error as e:

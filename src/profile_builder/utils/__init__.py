@@ -85,7 +85,12 @@ def copy_file(source_path, output_path):
         output_path = os.path.join(output_path, os.path.basename(source_path))
     shutil.copyfile(source_path, output_path)
 
-
+def yaml_write_file(content, output_path):
+    """
+    Convert content to YAML and Write to output_path, making sure any parent directories exist.
+    """
+    write_file(yaml.dump(content, sort_keys=False).encode(), output_path)
+    
 def write_file(content, output_path):
     """
     Write content to output_path, making sure any parent directories exist.
