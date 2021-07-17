@@ -19,36 +19,32 @@ jobs:
         #uses: actions/checkout@v2
         env:
           BLOG_CONFIG: ${{github.event.issue.body}}
+        
+      - name: Checkout main
+        uses: actions/checkout@v2
+      
+      - name: Create new Branch
+        run: |
+          git checkout -b blog/iss${{github.event.issue.number}}
+          
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{matrix.python-version}}
+      
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt 
+      
+      - name: Generate Blog Entry and Clean Up
         run: |
           echo "${{env.BLOG_CONFIG}}" > config.yml
           cat config.yml
-          pwd
-          ls
-      
-      - name: Checkout main and create new branch
-        uses: actions/checkout@v2
-      
-      - run: |
-          git checkout -b blog/iss${{github.event.issue.number}}
-          pwd
-
-      # - name: Setup Python
-      #   uses: actions/setup-python@v2
-      #   with:
-      #     python-version: ${{matrix.python-version}}
-      
-
-      # - name: Install Dependencies
-      #   run: |
-      #     python -m pip install --upgrade pip
-      #     pip install -r requirements.txt 
-      
-      # - name: Generate Blog Entry
-      #   run: |
-      #     ls
-      #     cd src
-      #     python -m profile_builder blog -t ./templates -o ../docs/blog -c ../config.yml -v
-      #     cd ..
-      #     git add .
-      #     git commit -m "generated iss${{github.event.issue.number}}"
-      #     git push
+          cd src
+          python -m profile_builder blog -t ./templates -o ../docs/blog -c ../config.yml -v
+          cd ..
+          rm config.yml
+          git add .
+          git commit -m "generated iss${{github.event.issue.number}}"
+          git push
