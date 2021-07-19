@@ -1,6 +1,6 @@
-<!-- ---
-disqus: jbold569.disqus.com
---- -->
+---
+disqus: jbold569
+---
 
 <div id="banner" class="page-image">
     <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="Lisa Brewster">

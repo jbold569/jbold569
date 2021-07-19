@@ -43,7 +43,7 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.details
 extra:
-  # disqus: jbold569.disqus.com
+  disqus: jbold569
   social:
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/jason-bolden-37b55443/
