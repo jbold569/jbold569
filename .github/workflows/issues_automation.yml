@@ -4,22 +4,23 @@ on:
     types: [assigned]
 
 jobs:
-  issue_assigned:
-    name: Issue Assigned
+  blog_issue_assigned:
+    if: ${{github.event.issue.labels[0].name == 'documentation.blog'}}
+    name: Blog Issue Assigned
     
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.8]
-    
+    env:
+      BRANCH_NAME: blog/issue${{github.event.issue.number}}
     steps:
-
       - name: Blog Post Issue Checkout main
         uses: actions/checkout@v2
       
-      - name: Create new Branch
+      - name: Create new Blog Branch
         run: |
-          git checkout -b blog/iss${{github.event.issue.number}}
+          git checkout -b ${{BRANCH_NAME}}
           
       - name: Setup Python
         uses: actions/setup-python@v2
@@ -32,9 +33,6 @@ jobs:
           pip install -r requirements.txt 
       
       - name: Generate Blog Entry and Clean Up
-        env:
-          BRANCH_NAME: blog/issue${{github.event.issue.number}}
-        if: ${{github.event.issue.labels[0].name == 'documentation.blog'}}
         run: |
           echo "${{github.event.issue.body}}" > src/config.yml
           cat src/config.yml
@@ -46,16 +44,4 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "generated ${{BRANCH_NAME}}"
-          git push --set-upstream origin ${{BRANCH_NAME}}
-      
-      - name: Generate Event Entry and Clean Up
-        if: ${{github.event.issue.labels[0].name == 'documentation.event'}}
-        run: |
-          echo "${{github.event.issue.body}}" > src/config.yml
-          cat src/config.yml
-      
-      - name: Generate Project Entry and Clean Up
-        if: ${{github.event.issue.labels[0].name == 'documentation.project'}}
-        run: |
-          echo "${{github.event.issue.body}}" > src/config.yml
-          cat src/config.yml
+          git push --set-upstream origin ${{BRANCH_NAME}}    

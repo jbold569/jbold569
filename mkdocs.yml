@@ -38,10 +38,12 @@ nav:
 markdown_extensions:
   - admonition
   - pymdownx.highlight:
-      linenums: true
+      linenums: True
+  - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.details
 extra:
+  # disqus: jbold569.disqus.com
   social:
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/jason-bolden-37b55443/
