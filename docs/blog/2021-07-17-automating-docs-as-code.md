@@ -64,7 +64,12 @@ Pushing this `.md` file to your repo under the `.github/ISSUE_TEMPLATE` director
 - `title` - The title of the blog entry.
 - `type` - This will be more apparent later, but depending on the type of blog entry, a different template will be used.
 - `summary` - This will appear as the first paragraph in the new entry. 
-  
+
+<figure>
+  <img src="../img/2021-07-17-issue-template.drawio.svg" />
+  <figcaption>Figure 2 - Result of our new issue template</figcaption>
+</figure>
+
 Important to note is the label used for this template. This will be used in the workflow that gets triggered next.
 
 What happens when we create our new issue? Nothing, without a workflow defined. We want this workflow to trigger when a new `Issue` has been assigned.
@@ -150,6 +155,11 @@ blog_filename = f"{config['publish_date']:%Y-%m-%d}-{slugify(config['title'])}.m
 dest_file = f"{output_dir}/{blog_filename}"
 generate_blog(template_file, config, dest_file)
 ```
+!!! note
+    Notice that we've parameterized the template filename using the type variable from the issue config.
+    ```python
+    template_file = f"{templates}/blog-post-{config['type']}.md.j2"
+    ```
 
 [Jinja](https://jinja.palletsprojects.com/en/3.0.x/templates/) is a great template engine for programmatically creating documents. Because blogs are pretty much rinse and repeat of the same formatting, why should we spend the time typing it out every time (or even copy pasting every time)? Jinja allows us to use the dict elements in our `config` variable to populate the `{{...}}` expression fields of our template. Once generated, our new entry is written to the `dest_file` directory.
 
@@ -220,6 +230,10 @@ We're almost done. The only thing remaining is to stitch our `profile_builder` i
 ```
 This code snippet builds on our GitHub Workflow step from [phase 1](#automating-inception). All we're doing is scripting out the actions previously described. To kick the whole thing off, simply create a new `Blog` issue, fill in the details, assign it to yourself, and switch to the newly created blog branch.
 
+<figure>
+  <img src="../img/2021-07-17-action-output.drawio.svg" />
+  <figcaption>Figure 3 - Completed Action workflow following issue assignment</figcaption>
+</figure>
 
 ## Conclusion
 At first glance, this may seem like overkill for a simple blog. A Wordpress or Squarespace site would be much easier to put together. So instead, let's think about a repo that holds engineering artifacts for the application your team supports. Or how about a knowledge base of training material for your team of developers. Incident response playbooks for your Security Operations Center, IT Help Desk procedures, etc.
