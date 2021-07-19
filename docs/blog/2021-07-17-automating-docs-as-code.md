@@ -72,18 +72,18 @@ What happens when we create our new issue? Nothing, without a workflow defined. 
 ```yaml hl_lines="2-4 8"
 name: Orchestrate Issue triggered workflows based on labels
 on:
-	issues:
-		types: [assigned]
+  issues:
+    types: [assigned]
 
 jobs:
-	blog_issue_assigned:
-		if: ${{github.event.issue.labels[0].name == 'documentation.blog'}}
-		name: Blog Issue Assigned
-		
-		runs-on: ubuntu-latest
-		strategy:
-			matrix:
-				python-version: [3.8]
+  blog_issue_assigned:
+    if: ${{github.event.issue.labels[0].name == 'documentation.blog'}}
+    name: Blog Issue Assigned
+    
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8]
 ```
 
 
