@@ -19,7 +19,7 @@ disqus: jbold569
 
 # Automating Docs as Code
 
-*Posted by [Jason Bolden](../about.md) on 2021 Jul 17* 
+*Posted by [Jason Bolden](../about.md) on Jul 17, 2021* 
 
 
 This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own. Moving at break-neck speeds to keep up with changing technology while pausing to record the trials and tribulations of the journey takes that much more time away from your Product Owner's tight deadlines. [Docs as Code](https://www.docslikecode.com/articles/change-case-study/) as a methodology is arguably magnitudes more convenient than maintaining a Sharepoint site or Word document, but what if we could make things just a little simpler for the lazy coder?
