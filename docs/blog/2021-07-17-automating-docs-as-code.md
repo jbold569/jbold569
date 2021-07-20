@@ -19,7 +19,7 @@ disqus: jbold569
 
 # Automating Docs as Code
 
-2021 Jul 17 by [Jason Bolden](../about.md)
+*Posted by [Jason Bolden](../about.md) on 2021 Jul 17* 
 
 
 This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own. Moving at break-neck speeds to keep up with changing technology while pausing to record the trials and tribulations of the journey takes that much more time away from your Product Owner's tight deadlines. [Docs as Code](https://www.docslikecode.com/articles/change-case-study/) as a methodology is arguably magnitudes more convenient than maintaining a Sharepoint site or Word document, but what if we could make things just a little simpler for the lazy coder?
@@ -33,13 +33,13 @@ In this article, we're going to explore a handful of methods to make capturing d
 </figure>
 
 !!! attention
-    There's a lot of moving pieced in this setup. It's important to note that this write up is focused on the art of the possible and snippets shared are enough for a presentable proof of concept. 
+    There's a lot of moving pieces in this setup. It's important to note that this write up is focused on the art of the possible and snippets shared are enough for a presentable proof of concept. 
 
 ## Steps
 Assuming you have a fresh repo ready to go, let's start at the top.
 
 ### Automating Inception
-We're going to use GitHub's functionality as our starting point when creating a new blog, specifically [Issues](https://guides.github.com/features/issues/). Just as an issue would typically be the starting point of a new feature for application development, we're going to treat this as the place where we capture the inspiration for our next blog entry.
+We're going to use GitHub's functionality as our starting point when creating a new blog, specifically [Issues](https://guides.github.com/features/issues/). Just as an issue would typically signal the beginning of a new feature for application development, we're going to treat this as the place where we capture the inspiration for our next blog entry.
 
 Since we're trying to cut out as much manual work as possible, let's take advantage of the template functionality GitHub supports for issues.
 
@@ -92,8 +92,8 @@ jobs:
 ```
 
 
-Now we can use that templated information within a linux environment to take us into phase 2 of our automation flow. 
-```yaml hl_lines="2-3"
+Now we can use that templated information within a linux environment to take us into phase 2 of our automation workflow. 
+```yaml hl_lines="3"
 - name: Generate Blog Entry and Clean Up
   run: |
     echo "${{github.event.issue.body}}" > src/config.yml
@@ -101,10 +101,15 @@ Now we can use that templated information within a linux environment to take us 
 ```
 
 !!! note
-    The commands for building a new blog entry only happen if the issue that triggered the GitHub workflow has a label of `documentation.blog`.
+    The job for building a new blog entry only runs if the issue that triggered the GitHub workflow has a label of `documentation.blog`.
 
 ### Automating Boilerplate Code
-For a moment assume we had to manually create this new blog entry. For our blog, we're using [mkdoc](https://www.mkdocs.org/). We would need to add the following to our directory structure every time:
+<figure>
+  <img src="../img/2021-07-17-issue-filled.drawio.svg" />
+  <figcaption>Figure 3 - Filled out issue </figcaption>
+</figure>
+
+With a brand new issue created, for a moment assume we had to manually create this new blog entry. For our blog, we're using [mkdocs](https://www.mkdocs.org/). We would need to spend valuable time adding the following to our directory structure:
 
 - New `.md` file under the blog directory
 - Type the file name with the correct naming convention
@@ -133,7 +138,7 @@ nav:
       - Automating Docs as Code: blog/2021-07-17-automating-docs-as-code.md
 ```
 
-These steps may be small and low effort, but over time these added steps become the annoyances that cause one to avoid capturing documentation. We're going to address this by using some python code.
+These steps may appear small and low effort, but over time they accumulate and become the annoyances that cause one to avoid capturing documentation all together. We're going to address this by using some python code.
 
 !!! Attention
     The code referenced in this post are snippets of the [profile_builder](https://github.com/jbold569/profile/tree/main/src/profile_builder) module used to create it. The entire module is outside of the scope of this discussion, but feel free to explore how the profile_builder works under the hood as an exercise.  
@@ -161,7 +166,7 @@ generate_blog(template_file, config, dest_file)
     template_file = f"{templates}/blog-post-{config['type']}.md.j2"
     ```
 
-[Jinja](https://jinja.palletsprojects.com/en/3.0.x/templates/) is a great template engine for programmatically creating documents. Because blogs are pretty much rinse and repeat of the same formatting, why should we spend the time typing it out every time (or even copy pasting every time)? Jinja allows us to use the dict elements in our `config` variable to populate the `{{...}}` expression fields of our template. Once generated, our new entry is written to the `dest_file` directory.
+[Jinja](https://jinja.palletsprojects.com/en/3.0.x/templates/) is a great template engine for programmatically creating documents. Because blogs are pretty much rinse and repeat of the same formatting, why should we spend the time typing it out every time (or even copy pasting for that matter)? Jinja allows us to use the dict elements in our `config` variable to populate the `{{...}}` expression fields of our template. Once generated, our new entry is written to the `dest_file` directory.
 
 ```jinja
 <div id="banner" class="page-image">
@@ -228,20 +233,22 @@ We're almost done. The only thing remaining is to stitch our `profile_builder` i
     git commit -m "generated ${{BRANCH_NAME}}"
     git push --set-upstream origin ${{BRANCH_NAME}}
 ```
-This code snippet builds on our GitHub Workflow step from [phase 1](#automating-inception). All we're doing is scripting out the actions previously described. To kick the whole thing off, simply create a new `Blog` issue, fill in the details, assign it to yourself, and switch to the newly created blog branch.
+This code snippet builds on our GitHub Workflow step from [phase 1](#automating-inception). All we're doing is scripting out the actions previously described in bash. To kick the whole thing off, simply create a new `Blog` issue, fill in the details, assign it to yourself, and switch to the newly created blog branch.
 
 <figure>
   <img src="../img/2021-07-17-action-output.drawio.svg" />
-  <figcaption>Figure 3 - Completed Action workflow following issue assignment</figcaption>
+  <figcaption>Figure 4 - Completed Action workflow following issue assignment</figcaption>
 </figure>
 
 ## Conclusion
 At first glance, this may seem like overkill for a simple blog. A Wordpress or Squarespace site would be much easier to put together. So instead, let's think about a repo that holds engineering artifacts for the application your team supports. Or how about a knowledge base of training material for your team of developers. Incident response playbooks for your Security Operations Center, IT Help Desk procedures, etc.
 
-This workflow allows for someone to create suggest an addition to the team's documentation, and automate a lot of the repetitive actions that demotivates the individual from creating the documentation in the first place. In addition to the bonus of treating the docs as managed source code, the GitHub repo facilitates a collaborative environment so documentation is less likely to be created in a vacuum without peer review.
+This workflow allows for someone to suggest an addition to the team's documentation, and automate a lot of the repetitive actions that demotivates the individual from creating the documentation in the first place. In addition to the bonus of treating the docs as managed source code, the GitHub repo facilitates a collaborative environment so documentation is less likely to be created in a vacuum without peer review.
 
 ## References
+- [Docs Like Code](https://www.docslikecode.com/)
 - [Jinja](https://jinja.palletsprojects.com/en/3.0.x/)
 - [MkDocs](https://www.mkdocs.org/)
 - [GitHub Actions](https://docs.github.com/en/actions)
 - [GitHub Issues](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository)
+- [YAML](https://yaml.org/)
