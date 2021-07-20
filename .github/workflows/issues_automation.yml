@@ -4,23 +4,23 @@ on:
     types: [assigned]
 
 jobs:
-  issue_assigned:
-    name: Issue Assigned
+  blog_issue_assigned:
+    if: ${{github.event.issue.labels[0].name == 'documentation.blog'}}
+    name: Blog Issue Assigned
     
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.8]
-
+    env:
+      BRANCH_NAME: blog/issue${{github.event.issue.number}}
     steps:
-
       - name: Blog Post Issue Checkout main
-        if: ${{github.event.issue.labels[0].name == 'documentation.blog'}}
         uses: actions/checkout@v2
       
-      - name: Create new Branch
+      - name: Create new Blog Branch
         run: |
-          git checkout -b blog/iss${{github.event.issue.number}}
+          git checkout -b ${{BRANCH_NAME}}
           
       - name: Setup Python
         uses: actions/setup-python@v2
@@ -43,5 +43,5 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "generated iss${{github.event.issue.number}}"
-          git push --set-upstream origin blog/iss${{github.event.issue.number}}
+          git commit -m "generated ${{BRANCH_NAME}}"
+          git push --set-upstream origin ${{BRANCH_NAME}}    

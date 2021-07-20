@@ -1,5 +1,8 @@
 mkdocs
 mkdocs-material
+Pygments
+markdown
+pymdown-extensions
 click
 jinja2
 python-slugify

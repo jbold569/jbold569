@@ -1,33 +1,52 @@
 site_name: Jason Bolden
+site_url: https://jbold569.github.io/profile/
+site_author: Jason Bolden
+
+use_directory_urls: False
+
+repo_name: jbold569/profile
+repo_url: https://github.com/jbold569/profile
+#edit_uri: ""
+
 theme:
   name: material
   features:
-  - navigation.tabs
-  - navigation.top
+    - navigation.tabs
+    - navigation.top
+    - search.highlight
+    - search.share
+    - search.suggest
   palette:
-  - primary: blue
-  - media: '(prefers-color-scheme: light)'
-    scheme: default
-    toggle:
-      icon: material/toggle-switch-off-outline
-      name: Switch to dark mode
-  - media: '(prefers-color-scheme: dark)'
-    scheme: slate
-    toggle:
-      icon: material/toggle-switch
-      name: Switch to light mode
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      primary: blue
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
 nav:
-- Home: index.md
-- About: about.md
-- Blogs:
-  - Content: blog/readme.md
+  - Home: index.md
+  - About: about.md
+  - Blogs:
+    - Content: blog/readme.md
+    - 2021:
+      - Automating Docs as Code: blog/2021-07-17-automating-docs-as-code.md
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      linenums: True
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
 extra:
+  disqus: jbold569
   social:
-  - icon: fontawesome/brands/linkedin
-    link: https://www.linkedin.com/in/jason-bolden-37b55443/
-    name: Jason Bolden on LinkedIn
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/jason-bolden-37b55443/
+      name: Jason Bolden on LinkedIn
 extra_css:
-# - stylesheets/bootstrap.css
-- stylesheets/custom.css
-# extra_javascript:
-# - javascripts/bootstrap.js
+  - stylesheets/custom.css
