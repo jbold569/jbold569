@@ -37,11 +37,15 @@ nav:
       - Automating Docs as Code: blog/2021-07-17-automating-docs-as-code.md
 markdown_extensions:
   - admonition
+  - meta
   - pymdownx.highlight:
       linenums: True
   - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
 extra:
   disqus: jbold569
   social:

@@ -1,46 +1,84 @@
 ---
 disqus: ""
+hide:
+    - toc
 ---
 
 # Blogs
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse non ipsum eget lectus maximus sollicitudin. Suspendisse sed placerat velit, eu scelerisque neque. Maecenas vel velit pulvinar, sollicitudin elit non, maximus orci. Maecenas semper finibus malesuada. Vivamus rutrum enim tristique, pretium leo nec, lobortis enim. In placerat leo at augue condimentum, eu viverra nulla scelerisque. Pellentesque convallis ex quis viverra laoreet. Etiam viverra justo sit amet diam tristique pulvinar. Quisque gravida tellus eget purus aliquam iaculis. Curabitur dapibus arcu pharetra tortor vestibulum, nec blandit leo tempus.
+Welcome to my collection of thoughts, lessons learned, and experiments. I've gather them here not only for my own record keeping, but also in the hopes that someone finds them beneficial and learns something new. They're organized under 3 main categories.
 
 ## Tech Blogs
-<div class="img-thumbnail">
-    <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="Lisa Brewster">
-    <div class="page-image-caption">
-        <p>
-            <a href="https://flic.kr/p/9NdAX1">Flickr Lisa Brewster</a>
-        </p>
+<section class="grid">
+    <div class="img-thumbnail  grid-item">
+        <img src="../img/blog-tech.drawio.svg" alt="Circuit Board">
+        <div class="page-image-caption">
+            <p>
+                <a href="https://flic.kr/p/2dqKrWG">Flickr Inge Knoff</a>
+            </p>
+        </div>
     </div>
-</div>
+    <p class="grid-item" style="grid-column: span 2 / auto;">Tech blogs are "rubber meets pavement" write ups on applied technology. They start with a problem, propose a solution, and walk through the steps. Some may also have an accompanying GitHub repo for easier setup.</p>
+</section>
 
 ## Idea Blogs
-<div class="img-thumbnail">
-    <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="Lisa Brewster">
-    <div class="page-image-caption">
-        <p>
-            <a href="https://flic.kr/p/9NdAX1">Flickr Lisa Brewster</a>
-        </p>
+<section class="grid">
+    <div class="img-thumbnail grid-item">
+        <img src="../img/blog-idea.drawio.svg" alt="Lightbulb">
+        <div class="page-image-caption">
+            <p>
+                <a href="https://flic.kr/p/BdjYs1">Flickr Shelby L. Bell</a>
+            </p>
+        </div>
     </div>
-</div>
+    <p class="grid-item" style="grid-column: span 2 / auto;">These blogs are more or less engineering journal entries. Inspiration could come at any moment, so why not have a nice place to store it. Idea blogs may spawn off into future projects or tech blogs. The main goal is to capture fleeting thoughts that could turn into fruitful endeavors.</p>
+</section>
 
 ## Insight Blogs
-<div class="img-thumbnail">
-    <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="Lisa Brewster">
-    <div class="page-image-caption">
-        <p>
-            <a href="https://flic.kr/p/9NdAX1">Flickr Lisa Brewster</a>
-        </p>
+<section class="grid">
+    <div class="img-thumbnail grid-item">
+        <img src="../img/blog-insight.drawio.svg" alt="Tea Wisdom">
+        <div class="page-image-caption">
+            <p>
+                <a href="https://flic.kr/p/9W32Nw">Flickr Carly Hagins</a>
+            </p>
+        </div>
     </div>
-</div>
+    <p class="grid-item" style="grid-column: span 2 / auto;">Insights are bits of corporate wisdom that I've picked up over the year. IT is moves at a fast pace, and with that comes buzzwords, hard and fast culture shifts, and a lot of bumps and bruises. These types of blogs are my way of sharing experiences I've learned from personally and potentially gain back some sanity by resonating with others.</p>
+</section>
 
-<div class="card" style="width: 16rem;">
-  <img src="../img/2021-07-17-blog-banner.drawio.svg" class="card-img-top" style="
-    background-size: cover;" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Automating Docs as Code</h5>
-    <p class="card-text">This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own...</p>
-    <a href="./2021-07-17-automating-docs-as-code.html" class="md-button md-button--primary">Read More</a>
-  </div>
-</div>
+## Recent Activity
+<section class="grid">
+    <div class="card" style="width: 15rem;">
+        <div class="card-img">
+            <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="...">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Automating Docs as Code</h5>
+            <h6 class="card-subtitle">July 17, 2021</h6>
+            <p class="card-text">This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own...</p>
+            <a href="./2021-07-17-automating-docs-as-code.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
+        </div>
+    </div>
+    <div class="card" style="width: 15rem;">
+        <div class="card-img">
+            <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="...">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Automating Docs as Code</h5>
+            <h6 class="card-subtitle">July 17, 2021</h6>
+            <p class="card-text">This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own...</p>
+            <a href="./2021-07-17-automating-docs-as-code.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
+        </div>
+    </div>
+    <div class="card" style="width: 15rem;">
+        <div class="card-img">
+            <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="...">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Automating Docs as Code</h5>
+            <h6 class="card-subtitle">July 17, 2021</h6>
+            <p class="card-text">This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own...</p>
+            <a href="./2021-07-17-automating-docs-as-code.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
+        </div>
+    </div>
+</section>
