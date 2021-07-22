@@ -82,6 +82,30 @@ def _open_config_file(config_file):
 
     return config_file
 
+def load_config_str(config_str=None, **kwargs):
+    """
+    Load the configuration from a config string
+    Extra kwargs are passed to the configuration to replace any default values
+    unless they themselves are None.
+    """
+    options = kwargs.copy()
+
+    # Filter None values from the options. This usually happens with optional
+    # parameters from Click.
+    for key, value in options.copy().items():
+        if value is None:
+            options.pop(key)
+
+    cfg = Config()
+    # First load the config file
+    cfg.load_file(config_str)
+    # Then load the options to overwrite anything in the config.
+    cfg.load_dict(options)
+
+    for key, value in cfg.items():
+        log.debug(f"Config value: '{key}' = {value!r}")
+
+    return cfg
 
 def load_config(config_file=None, **kwargs):
     """

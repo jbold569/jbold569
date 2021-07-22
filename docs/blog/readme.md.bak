@@ -3,6 +3,7 @@ disqus: ""
 hide:
     - toc
 ---
+
 # Blogs
 Welcome to my collection of thoughts, lessons learned, and experiments. I've gather them here not only for my own record keeping, but also in the hopes that someone finds them beneficial and learns something new. They're organized under 3 main categories.
 
@@ -45,19 +46,39 @@ Welcome to my collection of thoughts, lessons learned, and experiments. I've gat
     <p class="grid-item" style="grid-column: span 2 / auto;">Insights are bits of corporate wisdom that I've picked up over the year. IT is moves at a fast pace, and with that comes buzzwords, hard and fast culture shifts, and a lot of bumps and bruises. These types of blogs are my way of sharing experiences I've learned from personally and potentially gain back some sanity by resonating with others.</p>
 </section>
 
-## Recent Posts
+## Recent Activity
 <section class="grid">
-    
     <div class="card" style="width: 15rem;">
         <div class="card-img">
-            <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="Automating Docs as Code">
+            <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="...">
         </div>
         <div class="card-body">
             <h5 class="card-title">Automating Docs as Code</h5>
             <h6 class="card-subtitle">July 17, 2021</h6>
-            <p class="card-text">This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own. Moving at break-neck speeds to keep up with chan...</p>
+            <p class="card-text">This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own...</p>
             <a href="./2021-07-17-automating-docs-as-code.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
         </div>
     </div>
-    
+    <div class="card" style="width: 15rem;">
+        <div class="card-img">
+            <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="...">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Automating Docs as Code</h5>
+            <h6 class="card-subtitle">July 17, 2021</h6>
+            <p class="card-text">This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own...</p>
+            <a href="./2021-07-17-automating-docs-as-code.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
+        </div>
+    </div>
+    <div class="card" style="width: 15rem;">
+        <div class="card-img">
+            <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="...">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Automating Docs as Code</h5>
+            <h6 class="card-subtitle">July 17, 2021</h6>
+            <p class="card-text">This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own...</p>
+            <a href="./2021-07-17-automating-docs-as-code.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
+        </div>
+    </div>
 </section>

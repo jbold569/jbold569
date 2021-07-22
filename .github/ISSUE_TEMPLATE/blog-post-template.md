@@ -9,4 +9,4 @@ assignees: ''
 
 title: <TITLE>
 type: <tech, insight, idea>
-summary: <brief summary of post>
+description: <brief summary of post>

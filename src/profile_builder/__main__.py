@@ -11,7 +11,7 @@ import os
 from . import __version__
 from . import utils
 from . import config
-from .commands import blog
+from .commands import blog, digest
 
 import click
 import textwrap
@@ -135,6 +135,18 @@ def cli():
 def blog_command(templates, config, output_dir, mkdocs_file, **kwargs):
     """Generate new blog according to arguments"""
     blog.blog(templates=templates, config=config, output_dir=output_dir, mkdocs_file=mkdocs_file, **kwargs)
+
+# This command creates the blog digest page, explaining the site section and has recent posts at the bottom of the page as cards
+@cli.command(name="digest")
+@click.option('-t', '--template', type=click.Path(), help='template help')
+@click.option('-l', '--limit', default=3, show_default=True)
+@click.option('-i', '--input-dir', type=click.Path(), help='config help')
+@click.option('-o', '--output-file', type=click.STRING, help="output help")
+@common_options
+# @common_config_options
+def digest_command(template, limit, input_dir, output_file, **kwargs):
+    """Generate new digest according to arguments"""
+    digest.digest(template=template, limit=limit, input_dir=input_dir, output_file=output_file, **kwargs)
 
 if __name__ == '__main__':
     cli()
