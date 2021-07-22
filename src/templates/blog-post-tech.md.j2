@@ -1,9 +1,9 @@
 ---
 disque: jbold569
 title: {{ title }}
-description: {{ summary }}
+description: {{ description }}
 publish_date: {{ publish date }}
-filename: {{ filename }}
+filename: {{ filename[:-3] }}
 ---
 
 <div id="banner" class="page-image">
@@ -26,7 +26,7 @@ filename: {{ filename }}
 *Posted by [Jason Bolden](../about.md) on {{ publish_date.strftime('%b %d, %Y') }}*
 
 
-{{ summary }}
+{{ description }}
 
 ## Objective
 ## Steps

@@ -9,11 +9,10 @@ jobs:
     name: Blog Issue Assigned
     
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.8]
     env:
       BRANCH_NAME: blog/issue${{github.event.issue.number}}
+      PYTHON_VERSION: 3.8
+      
     steps:
       - name: Blog Post Issue Checkout main
         uses: actions/checkout@v2
@@ -25,7 +24,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{matrix.python-version}}
+          python-version: ${{PYTHON_VERSION}}
       
       - name: Install Dependencies
         run: |
@@ -38,6 +37,8 @@ jobs:
           cat src/config.yml
           cd src
           python -m profile_builder blog -t ./templates -o ../docs/blog -c ./config.yml -v
+          python -m profile_builder digest -t ./templates/home-digest.md.j2 -l 3 -i ../docs/blog -o ../docs/index.md -v
+          python -m profile_builder digest -t ./templates/blog-digest.md.j2 -l 3 -i ../docs/blog -o ../docs/blog/readme.md -v
           rm config.yml
           cd ..
           git config user.name github-actions
