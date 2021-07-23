@@ -6,7 +6,7 @@ hide:
 # Blogs
 Welcome to my collection of thoughts, lessons learned, and experiments. I've gather them here not only for my own record keeping, but also in the hopes that someone finds them beneficial and learns something new. They're organized under 3 main categories.
 
-## Tech Blogs
+## Tech
 <section class="grid">
     <div class="img-thumbnail  grid-item">
         <img src="../img/blog-tech.drawio.svg" alt="Circuit Board">
@@ -19,7 +19,7 @@ Welcome to my collection of thoughts, lessons learned, and experiments. I've gat
     <p class="grid-item" style="grid-column: span 2 / auto;">Tech blogs are "rubber meets pavement" write ups on applied technology. They start with a problem, propose a solution, and walk through the steps. Some may also have an accompanying GitHub repo for easier setup.</p>
 </section>
 
-## Idea Blogs
+## Idea
 <section class="grid">
     <div class="img-thumbnail grid-item">
         <img src="../img/blog-idea.drawio.svg" alt="Lightbulb">
@@ -32,7 +32,7 @@ Welcome to my collection of thoughts, lessons learned, and experiments. I've gat
     <p class="grid-item" style="grid-column: span 2 / auto;">These blogs are more or less engineering journal entries. Inspiration could come at any moment, so why not have a nice place to store it. Idea blogs may spawn off into future projects or tech blogs. The main goal is to capture fleeting thoughts that could turn into fruitful endeavors.</p>
 </section>
 
-## Insight Blogs
+## Insight
 <section class="grid">
     <div class="img-thumbnail grid-item">
         <img src="../img/blog-insight.drawio.svg" alt="Tea Wisdom">
