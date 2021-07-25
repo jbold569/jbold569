@@ -19,12 +19,12 @@ jobs:
       
       - name: Create new Blog Branch
         run: |
-          git checkout -b ${{BRANCH_NAME}}
+          git checkout -b ${{env.BRANCH_NAME}}
           
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{PYTHON_VERSION}}
+          python-version: ${{env.PYTHON_VERSION}}
       
       - name: Install Dependencies
         run: |
