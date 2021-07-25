@@ -57,6 +57,7 @@ def blog(templates=None, config_file=None, output_dir=None, mkdocs_file=None, **
         config['publish_date'] = date.today()
         template_file = f"{templates}/blog-post-{config['type']}.md.j2"
         blog_filename = f"{config['publish_date']:%Y-%m-%d}-{slugify(config['title'])}.md"
+        config['filename'] = blog_filename
         dest_file = f"{output_dir}/{blog_filename}"
         
         generate_blog(template_file, config, dest_file)
