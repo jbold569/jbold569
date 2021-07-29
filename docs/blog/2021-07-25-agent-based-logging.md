@@ -443,77 +443,214 @@ Navigate to the provisioned `pod` and start the terminal for the nxlog-ce contai
     [NXLog documents](https://nxlog.co/documentation/nxlog-user-guide/kubernetes.html) both Daemonset and Sidecar configurations for logging. 
 
 ### MiNiFi
+Coined the Swiss Army Knife of Dataflows, there's literally nothing you can't do with Apache NiFi. Eat your heart out on the [documentation](https://nifi.apache.org/docs.html). 
 <figure>
-  <img src="https://dummyimage.com/600x400/eee/aaa" width="300" />
-  <figcaption>Image caption</figcaption>
+  <img src="../img/2021-07-25-minifi-conceptual.drawio.svg"/>
+  <figcaption>Figure 8 - MiNiFi conceptual architecture</figcaption>
 </figure>
 
 #### 30 Minute Sprint
+NiFi/MiNiFi use `Processors` to create, tranform, and transmit `Flowfiles`. That's pretty much it. Full disclosure, I have many years of experience working with NiFi. I've deployed and maintained NiFi clusters in multiple data centers, developed configurations for MiNiFi in the cloud, and deployed agents to thousands of self service machines. I'm no stranger to the tool, so the 30 minutes time cap doesn't really apply here.
+
+That said, my experience with this tool did not help me as much as it should have for our two test cases. For the sake of time and, frankly, to limit the scope of this post, I had to cut the testing of the MiNiFi agent short as I was going way too far in the weeds trying to get the configuration working. While NiFi and MiNiFi sport [all the features](https://nifi.apache.org/docs/nifi-docs/html/overview.html#high-level-overview-of-key-nifi-features) you'd want in an enterprise setting ([security](https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#security_configuration), [resiliency](https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#clustering), [monitoring](https://nifi.apache.org/docs/nifi-docs/html/user-guide.html#Reporting_Tasks), flexibility, extensibility, etc.), the tool is massive and requires a lot of overhead to utilize effectively.
+
+Not to add insult to injury, but MiNiFi has two version, C++ and Java. The Java agent, for all intensive purpose, is a headless version of NiFi with fewer core packages included. It's still a hefty agent, but you have 100% feature parity with the server version. The C++ agent is much lighter, however not all functionality is supported.
+
 #### Local Setup
-After downloading the [installer](https://nxlog.co/products/nxlog-community-edition/download) and completing [installation](https://nxlog.co/documentation/nxlog-user-guide/deployment.html), create one new `*.conf` files to save the following settings:
+MiNiFi agents are configured using as single `yaml`; however, it is not recommended that one writes a configuration from a text editor (you'll soon see why). The Quickstart walks through how to create a dataflow from the NiFi UI, save it as a template, export, and convert to the `.yml` config accepted by MiNiFi.
 
-- `nxlog.conf` defines our data flow. 
-    ```nxlog
-    <Extension _json>
-        Module  xm_json
-    </Extension>
-    
-    <Input winlog>
-        Module  im_wseventing
-        Exec to_json();    
-        <QueryXML>
-            <QueryList>
-                <Query Id="0" Path="Application">
-                    <Select Path="System">*</Select>                    
-                </Query>
-            </QueryList>
-        </QueryXML>
-    </Input>
-    
-    define EVENT_REGEX /(?x)^(\d+-\d+-\d+T\d+:\d+:\d+)\s+(\S+)\s+(.*)/
-    <Input file>
-        Module  im_file
-        File    "C:\\logs\\log-file.log"
-        <Exec>
-            if $raw_event =~ %EVENT_REGEX%
-            {
-                $EventTime = strptime($1,'%Y-%m-%dT%T');
-                $Host = $2;
-                $Message = $3;
-                to_json();
-            }
-            else drop();
-        </Exec>
-    </Input>
+<figure>
+  <img src="../img/2021-07-25-minifi-flow.drawio.svg"/>
+  <figcaption>Figure 9 - NiFi UI depicting local dataflow setup</figcaption>
+</figure>
 
-    <Output tcp>
-        Module  om_tcp
-        Host    127.0.0.1
-        Port    8514
-    </Output>
+After conversion, the flow above becomes...
 
-    <Route winlog_to_tcp>
-        Path    winlog => tcp
-    </Route>
+??? warning "`conf.yml`"
+    ```yaml
+    MiNiFi Config Version: 3
+    Flow Controller:
+    name: local-setup
+    comment: ''
+    Core Properties:
+    flow controller graceful shutdown period: 10 sec
+    flow service write delay interval: 500 ms
+    administrative yield duration: 30 sec
+    bored yield duration: 10 millis
+    max concurrent threads: 1
+    variable registry properties: ''
+    FlowFile Repository:
+    partitions: 256
+    checkpoint interval: 2 mins
+    always sync: false
+    Swap:
+        threshold: 20000
+        in period: 5 sec
+        in threads: 1
+        out period: 5 sec
+        out threads: 4
+    Content Repository:
+    implementation: org.apache.nifi.controller.repository.FileSystemRepository
+    content claim max appendable size: 10 MB
+    content claim max flow files: 100
+    content repository archive enabled: false
+    content repository archive max retention period: 12 hours
+    content repository archive max usage percentage: 50%
+    always sync: false
+    Provenance Repository:
+    provenance rollover time: 1 min
+    implementation: org.apache.nifi.provenance.WriteAheadProvenanceRepository
+    provenance index shard size: 500 MB
+    provenance max storage size: 1 GB
+    provenance max storage time: 24 hours
+    provenance buffer size: 10000
+    Component Status Repository:
+    buffer size: 1440
+    snapshot frequency: 1 min
+    Security Properties:
+    keystore: ''
+    keystore type: ''
+    keystore password: ''
+    key password: ''
+    truststore: ''
+    truststore type: ''
+    truststore password: ''
+    ssl protocol: ''
+    Sensitive Props:
+        key: gAHRSHkEd0lN7Vy1SW20sgZhsNjyGSWx
+        algorithm: PBEWITHMD5AND256BITAES-CBC-OPENSSL
+        provider: BC
+    Processors:
+    - id: 4933996e-f262-3afa-0000-000000000000
+    name: ConsumeWindowsEventLog
+    class: org.apache.nifi.processors.windows.event.log.ConsumeWindowsEventLog
+    max concurrent tasks: 1
+    scheduling strategy: TIMER_DRIVEN
+    scheduling period: 0 sec
+    penalization period: 30 sec
+    yield period: 1 sec
+    run duration nanos: 0
+    auto-terminated relationships list: []
+    Properties:
+        channel: Application
+        inactiveDurationToReconnect: 10 mins
+        maxBuffer: '1048576'
+        maxQueue: '1024'
+        query: |-
+        <QueryList>
+            <Query Id="0" Path="Application">
+            <Select Path="Application">*</Select>
+            </Query>
+        </QueryList>
+    - id: ffaea6de-2e7c-3964-0000-000000000000
+    name: PutElasticsearch
+    class: org.apache.nifi.processors.elasticsearch.PutElasticsearch
+    max concurrent tasks: 1
+    scheduling strategy: TIMER_DRIVEN
+    scheduling period: 0 sec
+    penalization period: 30 sec
+    yield period: 1 sec
+    run duration nanos: 0
+    auto-terminated relationships list: []
+    Properties:
+        Batch Size: '100'
+        Character Set: UTF-8
+        Cluster Name: elasticsearch
+        ElasticSearch Hosts:
+        ElasticSearch Ping Timeout: 5s
+        Identifier Attribute:
+        Index:
+        Index Operation: index
+        Password:
+        SSL Context Service:
+        Sampler Interval: 5s
+        Shield Plugin Filename:
+        Type:
+        Username:
+    - id: a6cc363f-e088-3e94-0000-000000000000
+    name: PutTCP
+    class: org.apache.nifi.processors.standard.PutTCP
+    max concurrent tasks: 1
+    scheduling strategy: TIMER_DRIVEN
+    scheduling period: 0 sec
+    penalization period: 30 sec
+    yield period: 1 sec
+    run duration nanos: 0
+    auto-terminated relationships list:
+    - failure
+    - success
+    Properties:
+        Character Set: UTF-8
+        Connection Per FlowFile: 'false'
+        Hostname: localhost
+        Idle Connection Expiration: 5 seconds
+        Max Size of Socket Send Buffer: 1 MB
+        Outgoing Message Delimiter:
+        Port: '8514'
+        SSL Context Service:
+        Timeout: 10 seconds
+    - id: 3ece5573-f82e-3f5f-0000-000000000000
+    name: TailFile
+    class: org.apache.nifi.processors.standard.TailFile
+    max concurrent tasks: 1
+    scheduling strategy: TIMER_DRIVEN
+    scheduling period: 0 sec
+    penalization period: 30 sec
+    yield period: 1 sec
+    run duration nanos: 0
+    auto-terminated relationships list: []
+    Properties:
+        File Location: Local
+        File to Tail: C:\\logs\\log-file.log
+        Initial Start Position: Beginning of File
+        Post-Rollover Tail Period: 0 sec
+        Rolling Filename Pattern:
+        reread-on-nul: 'false'
+        tail-base-directory:
+        tail-mode: Single file
+        tailfile-lookup-frequency: 10 minutes
+        tailfile-maximum-age: 24 hours
+        tailfile-recursive-lookup: 'false'
+    Controller Services: []
+    Process Groups: []
+    Input Ports: []
+    Output Ports: []
+    Funnels: []
+    Connections:
+    - id: e7bee299-ce60-3591-0000-000000000000
+    name: ConsumeWindowsEventLog/success/PutTCP
+    source id: 4933996e-f262-3afa-0000-000000000000
+    source relationship names:
+    - success
+    destination id: a6cc363f-e088-3e94-0000-000000000000
+    max work queue size: 10000
+    max work queue data size: 1 GB
+    flowfile expiration: 0 sec
+    queue prioritizer class: ''
+    - id: b1d11f20-c37d-365e-0000-000000000000
+    name: TailFile/success/PutTCP
+    source id: 3ece5573-f82e-3f5f-0000-000000000000
+    source relationship names:
+    - success
+    destination id: a6cc363f-e088-3e94-0000-000000000000
+    max work queue size: 10000
+    max work queue data size: 1 GB
+    flowfile expiration: 0 sec
+    queue prioritizer class: ''
+    Remote Process Groups: []
+    NiFi Properties Overrides: {}
 
-    <Route file_to_tcp>
-        Path    file => tcp
-    </Route>
     ```
 
-!!! attention
-    Ensure that the `File` directive matches the path used by the `log-gen.py` script.
-
-Testing procedures are as follows.
+Testing procedures are as follows. We're not going into great detail on this one.
 
 1. Run the logger script.
     ```powershell
     ❯ python log-gen.py log-file.log
     ```
-2. In another terminal, with administrative privileges. 
+2. In another terminal, ensure that the `config.yml` file is in the `conf` directory for MiNiFi. Start the agent. 
     ```powershell
-    ❯ cd $NXLOG_PATH
-    ❯ ./nxlog.exe -c ./nxlog.conf
+    ❯ ./run-minifi.bat
     ```
 3. Lastly, on the receiving end, we'll start our TCP listener.
     ```bash
@@ -525,19 +662,17 @@ Testing procedures are as follows.
     2021-07-28T21:35:11 BoldDesktop Hello, World!
     ```
 !!! attention
-    NXLog for Windows is and `.msi` installation. For my setup, I added the path to the `nxlog.exe` to my system path for ease of use. `$NXLOG_PATH` is not defined by default.
+    The steps to convert the NiFi `.xml` template to the `.yml` config file have been omitted.
 
-!!! note
-    Again, I've left out the windows event logs from the samples above to minimize sharing of sensitive information.
 #### Cloud Setup
-
+Leaving this as an exercise for the brave. While I've done this in the past, revisiting the subject has made me realize the tool is not suited for these quick evaluation scenarios.
 
 ## Conclusion
 |Tool       |Documentation|Ease of Use|Cloud Readiness|Architecture|
 |-----------|-------------|-----------|---------------|------------|
-|`Fluentbit`|             |           |---------------|------------|
-|`NXLog`    |             |           |---------------|------------|
-|`MiNiFi`   |             |           |---------------|------------|
+|`Fluentbit`|:star::star::star:|:star::star::star::star::star:|:star::star::star::star::star:|:star::star::star::star:|
+|`NXLog`    |:star::star::star::star:|:star::star::star:|:star::star::star:|:star::star::star:|
+|`MiNiFi`   |:star::star::star::star::star::star:|:star:|:star:|:star::star::star::star::star:|
 
 ## References
 - [Fluentbit Documentation](https://docs.fluentbit.io/manual/)
