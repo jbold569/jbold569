@@ -33,13 +33,16 @@ nav:
     - Agent Based Logging: blog/2021-07-25-agent-based-logging.md
     - Automating Docs as Code: blog/2021-07-17-automating-docs-as-code.md
 markdown_extensions:
+- abbr
 - admonition
+- attr_list
 - meta
 - pymdownx.highlight:
     linenums: true
 - pymdownx.inlinehilite
 - pymdownx.superfences
 - pymdownx.details
+- pymdownx.snippets
 - pymdownx.emoji:
     emoji_index: !!python/name:materialx.emoji.twemoji ''
     emoji_generator: !!python/name:materialx.emoji.to_svg ''
