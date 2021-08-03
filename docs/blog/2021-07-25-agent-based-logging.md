@@ -43,7 +43,7 @@ NXLog was created back in 2009 as an alternative to msyslog. Originally a closed
 
 ![MiNiFi](../img/2021-07-25-minifi-logo.drawio.svg) 
 
-Apache NiFi began as a project created by the NSA. It was later introduced to the Apache Software Foundation, and subsequently commercialized by Hortonworks (now [Cloudera](https://www.cloudera.com/)). The tool is a robust Data Flow Controller with the goal of making the automation and management of ETL processes simpler and more maintainable. MiNiFi is a sub-project that borrows the fundamental concepts defined by NiF, but packages them in a smaller form factor for deployment to endpoints and IoT devices.
+Apache NiFi began as a project created by the NSA. It was later introduced to the Apache Software Foundation, and subsequently commercialized by Hortonworks (now [Cloudera](https://www.cloudera.com/)). The tool is a robust Data Flow Controller with the goal of making the automation and management of ETL processes simpler and more maintainable. MiNiFi is a sub-project that borrows the fundamental concepts defined by NiFi, but packages them in a smaller form factor for deployment to endpoints and IoT devices.
 
 We'll run through a basic deployment to a Windows desktop to demonstrate local setup and Kubernetes for cloud. In my personal experience, I've leveraged NiFi quite extensively. To be as objective as possibly in our evaluation, we'll measure each tool according to the following criteria:
 
