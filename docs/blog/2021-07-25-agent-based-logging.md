@@ -33,13 +33,19 @@ Whether you're working in site reliability, business intelligence, or security, 
 ## Objective
 In this post we'll explore 3 popular logging agents to better understand the pros and cons of each solution for different scenarios. The contenders are:
 
-![Fluentbit](../img/2021-07-25-fluentbit-logo.drawio.svg) Created in 2011, Fluentd is one of the most popular logging agents in the cloud computing space. The project was open-sourced in the same year, and Google supports their own flavor as their standard cloud logging agent. In 2014, Fluentbit was created as a lighter weight agent for IoT workloads.
+![Fluentbit](../img/2021-07-25-fluentbit-logo.drawio.svg) 
 
-![NXLog](../img/2021-07-25-nxlog-logo.drawio.svg) NXLog was created back in 2009 as an alternative to msyslog. Originally a closed source project, NXLog Community Edition was open-sourced in 2011 and has been free since. NXLog has a reputation in the cybersecurity space as a windows event log collector. SANS [SEC555](https://www.sans.org/cyber-security-courses/siem-with-tactical-analytics/) course references NXLog as a reliable free option for gain visibility into windows and system logging.
+Created in 2011, Fluentd is one of the most popular logging agents in the cloud computing space. The project was open-sourced in the same year, and Google supports their own flavor as their standard cloud logging agent. In 2014, Fluentbit was created as a lighter weight agent for IoT workloads.
 
-![MiNiFi](../img/2021-07-25-minifi-logo.drawio.svg) Apache NiFi began as a project created by the NSA. It was later introduced to the Apache Software Foundation, and subsequently commercialized by Hortonworks (now [Cloudera](https://www.cloudera.com/)). The tool is a robust Data Flow Controller with the goal of making the automation and management of ETL process simpler and more maintainable. MiNiFi is a sub-project that borrows the fundamental concepts defined by NiF, but packages them in a smaller form factor for deployment to endpoints and IoT devices.
+![NXLog](../img/2021-07-25-nxlog-logo.drawio.svg) 
 
-We'll run through a basic deployment to a window desktop to demonstrate local setup and Kubernetes for cloud. In my personal experience, I've leveraged NiFi quite extensively. To be as objective as possibly in our evaluation, we'll measure each tool according to the following criteria:
+NXLog was created back in 2009 as an alternative to msyslog. Originally a closed source project, NXLog Community Edition was open-sourced in 2011 and has been free since. NXLog has a reputation in the cybersecurity space as a windows event log collector. SANS' [SEC555](https://www.sans.org/cyber-security-courses/siem-with-tactical-analytics/) course references NXLog as a reliable free option for gaining visibility into windows and system logging.
+
+![MiNiFi](../img/2021-07-25-minifi-logo.drawio.svg) 
+
+Apache NiFi began as a project created by the NSA. It was later introduced to the Apache Software Foundation, and subsequently commercialized by Hortonworks (now [Cloudera](https://www.cloudera.com/)). The tool is a robust Data Flow Controller with the goal of making the automation and management of ETL processes simpler and more maintainable. MiNiFi is a sub-project that borrows the fundamental concepts defined by NiF, but packages them in a smaller form factor for deployment to endpoints and IoT devices.
+
+We'll run through a basic deployment to a Windows desktop to demonstrate local setup and Kubernetes for cloud. In my personal experience, I've leveraged NiFi quite extensively. To be as objective as possibly in our evaluation, we'll measure each tool according to the following criteria:
 
 - `Documentation` - This will be judged on completeness, number of examples, and searchability
 - `Ease of Use` - How short is the time to get up and running, does the agent support monitoring, is it easy to maintain?
@@ -65,7 +71,7 @@ All configurations and scripts for this post can be found in this [GitHub repo](
 
 ## The Breakdown
 
-Logging agents typically follow a 3 part architecture. `Source`, defines how the agent interfaces with the log producing system. `Channel`, a temporal transport layer. Data are stored, transformed, and/or filtered in this layer. Lastly, `Sink` defines the interface with the destination of the data. As we describe the architecture of the three Solutions, we'll tie their components back to these three constructs for consistency and ease of comparison.
+Logging agents typically follow a 3 part architecture. `Source`, defines how the agent interfaces with the log producing system. `Channel`, a transport layer. Data are stored, transformed, and/or filtered in this layer. Lastly, `Sink` defines the interface with the destination of the data. As we describe the architecture of the three Solutions, we'll tie their components back to these three constructs for consistency and ease of comparison.
 
 <figure>
   <img src="../img/2021-07-25-agent-conceptual.drawio.svg"/>
@@ -102,6 +108,7 @@ CMD ["python3", "log-gen.py", "/var/log/log-file.log"]
 ```bash
 minikube start
 eval $(minikube docker-env)
+cd logging-agent-eval/cloud
 docker build --tag chatty-app .
 docker images
 ```
@@ -119,7 +126,7 @@ After 30 minutes of combing the documentation, I felt pretty comfortable to star
 
 Concerning the bells and whistles, [security](https://docs.fluentbit.io/manual/administration/security) is supported through the use of TLS. All `outputs` that require network I/O support options for TLS configuration. Agents are resilient through the use of [buffering](https://docs.fluentbit.io/manual/administration/buffering-and-storage), enabling persistance to disk. Agent health can be [monitored](https://docs.fluentbit.io/manual/administration/monitoring) via API calls when configured. Alternatively, one could use the [Prometheus Exporter](https://docs.fluentbit.io/manual/pipeline/outputs/prometheus-exporter) output plugin to route monitoring metrics directly to a prometheus server.  [configuration](https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/configuration-file).
 
-Visualization!!!! Fluentbit ha
+Fluentbit also has a handy [visualizer](https://cloud.calyptia.com/#/visualizer) to aid in flow development. This can be very useful when troubleshooting complex dataflows.
 
 !!! attention
     Take care with buffering strategies on cloud workloads. Due to the ephemeral nature of container resources, one should ensure the Fluentbit storage paths point to persistent volumes in your K8S deployment.   
@@ -269,9 +276,9 @@ NXLog may appear simple [conceptually](https://nxlog.co/documentation/nxlog-user
 </figure>
 
 #### 30 Minute Sprint
-NXLog is definitely a very mature project. The documentation is dense and thorough. When I stumbled on their [expression language](https://nxlog.co/documentation/nxlog-user-guide/nxlog-language.html) page, I knew I was headed into power user territory. NXLog `Routes` process `event records`, collections of `fields`. The configuration file is made up of 2 main constructs, `Directives` and `Modules`. There are 4 types of `Modules`. `Inputs` consume event records from source systems and optionally parse incoming records. `Processors` provide functionality for transforming, buffering, and/or filtering event records. `Outputs` emit event records to a destination system. Lastly, `Extensions` provide extended functionality to the NXLog language. `Directives` are parameters that define the various components of the NXLog configuration.
+NXLog is definitely a very mature project. The documentation is dense and thorough. When I stumbled on their [expression language](https://nxlog.co/documentation/nxlog-user-guide/nxlog-language.html) page, I knew I was headed into power user territory. NXLog `Routes` process [`event records`](https://nxlog.co/documentation/nxlog-user-guide/events-fields.html), collections of `fields`. The configuration file is made up of 2 main constructs, `Directives` and `Modules`. There are 4 types of `Modules`. `Inputs` consume event records from source systems and optionally parse incoming records. `Processors` provide functionality for transforming, buffering, and/or filtering event records. `Outputs` emit event records to a destination system. Lastly, `Extensions` provide extended functionality to the NXLog language. `Directives` are parameters that define the various components of the NXLog configuration.
 
-Several example of [buffering strategies](https://nxlog.co/documentation/nxlog-user-guide/using-buffers.html) are documented. Monitoring functionality is [lackluster](https://nxlog.co/documentation/nxlog-user-guide/monitoring.html). Documentation only mentions OS specific methods for ensuring NXLog runs as a service; however, collection of health metrics is not mentioned. There are several useful features that are only available in the enterprise version of the agent. Their [feature comparison](https://nxlog.co/documentation/nxlog-user-guide/about-nxlog.html#feature_comparison) section goes into more depth. In all, solid knowledge base backing the project. Almost overwhelming, but not so much so that we can't quickly get an MVP running quickly. Security is support via Input and Output modules that handle SSL/TLS configurations.
+Several examples of [buffering strategies](https://nxlog.co/documentation/nxlog-user-guide/using-buffers.html) are documented. Monitoring functionality is [lackluster](https://nxlog.co/documentation/nxlog-user-guide/monitoring.html). Documentation only mentions OS specific methods for ensuring NXLog runs as a service; however, collection of health metrics is not mentioned. There are several useful features that are only available in the enterprise version of the agent. Their [feature comparison](https://nxlog.co/documentation/nxlog-user-guide/about-nxlog.html#feature_comparison) section goes into more depth. In all, solid knowledge base backing the project. Almost overwhelming, but not so much so that we can't get an MVP running quickly. Security is supported via Input and Output modules that handle SSL/TLS configurations.
 
 #### Local Setup
 After downloading the [installer](https://nxlog.co/products/nxlog-community-edition/download) and completing [installation](https://nxlog.co/documentation/nxlog-user-guide/deployment.html), create one new `*.conf` files to save the following settings:
@@ -349,7 +356,7 @@ Testing procedures are as follows.
     {"EventReceivedTime":"2021-07-27 22:35:02","SourceModuleName":"file","SourceModuleType":"im_file","EventTime":"2021-07-27 22:35:02","Host":"BoldDesktop","Message":"Hello, World!"}
     ```
 !!! attention
-    NXLog for Windows is and `.msi` installation. For my setup, I added the path to the `nxlog.exe` to my system path for ease of use. `$NXLOG_PATH` is not defined by default.
+    NXLog for Windows is an `.msi` installation. For my setup, I added the path to the `nxlog.exe` to my system path for ease of use. `$NXLOG_PATH` is not defined by default.
 
 !!! note
     Again, I've left out the windows event logs from the samples above to minimize sharing of sensitive information.
@@ -440,24 +447,24 @@ Navigate to the provisioned `pod` and start the terminal for the nxlog-ce contai
 </figure>
 
 !!! note
-    [NXLog documents](https://nxlog.co/documentation/nxlog-user-guide/kubernetes.html) both Daemonset and Sidecar configurations for logging. 
+    NXLog [documents](https://nxlog.co/documentation/nxlog-user-guide/kubernetes.html) both Daemonset and Sidecar configurations for logging. 
 
 ### MiNiFi
-Coined the Swiss Army Knife of Dataflows, there's literally nothing you can't do with Apache NiFi. Eat your heart out on the [documentation](https://nifi.apache.org/docs.html). 
+Coined the Swiss Army Knife of Dataflows, there's almost nothing you can't do with Apache NiFi. Eat your heart out on the [documentation](https://nifi.apache.org/docs.html). 
 <figure>
   <img src="../img/2021-07-25-minifi-conceptual.drawio.svg"/>
   <figcaption>Figure 8 - MiNiFi conceptual architecture</figcaption>
 </figure>
 
 #### 30 Minute Sprint
-NiFi/MiNiFi use `Processors` to create, tranform, and transmit `Flowfiles`. That's pretty much it. Full disclosure, I have many years of experience working with NiFi. I've deployed and maintained NiFi clusters in multiple data centers, developed configurations for MiNiFi in the cloud, and deployed agents to thousands of self service machines. I'm no stranger to the tool, so the 30 minutes time cap doesn't really apply here.
+NiFi/MiNiFi uses `Processors` to create, transform, and transmit `Flowfiles`. That's pretty much it. Full disclosure, I have many years of experience working with NiFi. I've deployed and maintained NiFi clusters in multiple data centers, developed configurations for MiNiFi in the cloud, and deployed agents to thousands of self service machines. I'm no stranger to the tool, so the 30 minutes time cap doesn't really apply here.
 
 That said, my experience with this tool did not help me as much as it should have for our two test cases. For the sake of time and, frankly, to limit the scope of this post, I had to cut the testing of the MiNiFi agent short as I was going way too far in the weeds trying to get the configuration working. While NiFi and MiNiFi sport [all the features](https://nifi.apache.org/docs/nifi-docs/html/overview.html#high-level-overview-of-key-nifi-features) you'd want in an enterprise setting ([security](https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#security_configuration), [resiliency](https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#clustering), [monitoring](https://nifi.apache.org/docs/nifi-docs/html/user-guide.html#Reporting_Tasks), flexibility, extensibility, etc.), the tool is massive and requires a lot of overhead to utilize effectively.
 
-Not to add insult to injury, but MiNiFi has two version, C++ and Java. The Java agent, for all intensive purpose, is a headless version of NiFi with fewer core packages included. It's still a hefty agent, but you have 100% feature parity with the server version. The C++ agent is much lighter, however not all functionality is supported.
+Not to add insult to injury, but MiNiFi has two version, C++ and Java. The Java agent, for all intensive purposes, is a headless version of NiFi with fewer core packages included. It's still a hefty agent, but you have 100% feature parity with the server version. The C++ agent is much lighter, however not all functionality is supported.
 
 #### Local Setup
-MiNiFi agents are configured using as single `yaml`; however, it is not recommended that one writes a configuration from a text editor (you'll soon see why). The Quickstart walks through how to create a dataflow from the NiFi UI, save it as a template, export, and convert to the `.yml` config accepted by MiNiFi.
+MiNiFi agents are configured using as single `yaml`; however, it is not recommended that one writes a configuration from a text editor (you'll soon see why). The [Quickstart](https://nifi.apache.org/minifi/minifi-java-agent-quick-start.html) walks through how to create a dataflow from the NiFi UI, save it as a template, export, and convert to the `.yml` config accepted by MiNiFi.
 
 <figure>
   <img src="../img/2021-07-25-minifi-flow.drawio.svg"/>
@@ -668,11 +675,17 @@ Testing procedures are as follows. We're not going into great detail on this one
 Leaving this as an exercise for the brave. While I've done this in the past, revisiting the subject has made me realize the tool is not suited for these quick evaluation scenarios.
 
 ## Conclusion
-|Tool       |Documentation|Ease of Use|Cloud Readiness|Architecture|
-|-----------|-------------|-----------|---------------|------------|
-|`Fluentbit`|:star::star::star:|:star::star::star::star::star:|:star::star::star::star::star:|:star::star::star::star:|
-|`NXLog`    |:star::star::star::star:|:star::star::star:|:star::star::star:|:star::star::star:|
-|`MiNiFi`   |:star::star::star::star::star::star:|:star:|:star:|:star::star::star::star::star:|
+This evaluation took longer than expected. Though all three tools are great products, each has their own unique advantages and disadvantages in comparison.
+
+|Tool       |Documentation   |Ease of Use     |Cloud Readiness  |Architecture    |
+|-----------|:--------------:|:--------------:|:---------------:|:--------------:|
+|`Fluentbit`|:third_place:   |:first_place:   |:first_place:    |:third_place:   |
+|`NXLog`    |:second_place:  |:second_place:  |:second_place:   |:second_place:  |
+|`MiNiFi`   |:first_place:   |:third_place:   |:third_place:    |:first_place:   |
+
+- `Fluentbit` - Fluentbit is the youngest on the block with lots of momentum. It's built for rapid prototyping and minimal enough to meet a majority of use cases while still being easy to use. Relatively, documentation is less mature than the others but still isn't bad. Architecture is simple, but loses out in comparison to its predecessors. It makes up for this in user friendliness and cloud readiness (Kubernetes includes FluentD in its logging strategy documentation!)
+- `NXLog` - Solidly in the middle ground. Old tool with a mature community. The NXLog language gives the user flexibility yet doesn't  require in depth knowledge to use.
+- `MiNiFi` - Documentation and Architecture are solid for the NiFi project. I will continue to advocate that this is hands down one of the best tools for dataflow management. However, the overhead of maintaining this platform is not for the startup or tinkerer. Cloudera does provide a [solution](https://docs.cloudera.com/cem/1.2.2/index.html) that simplifies the management of agents and deployment of configurations, but it is behind a pay wall. If you're in an enterprise setting and you're keen on a robust dataflow strategy, it may be worth the time investment. Otherwise, stick to one of the other two.
 
 ## References
 - [Fluentbit Documentation](https://docs.fluentbit.io/manual/)
