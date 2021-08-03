@@ -6,6 +6,8 @@ publish_date: 2021-07-17
 filename: 2021-07-17-automating-docs-as-code
 ---
 
+--8<-- "includes/abbreviations.md"
+
 <div id="banner" class="page-image">
     <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="Lisa Brewster">
     <div class="page-image-caption">
@@ -39,7 +41,7 @@ In this article, we're going to explore a handful of methods to make capturing d
 !!! attention
     There's a lot of moving pieces in this setup. It's important to note that this write up is focused on the art of the possible and snippets shared are enough for a presentable proof of concept. 
 
-## Steps
+## The Breakdown
 Assuming you have a fresh repo ready to go, let's start at the top.
 
 ### Automating Inception

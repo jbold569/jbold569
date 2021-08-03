@@ -1,7 +1,6 @@
 ---
 hide:
     - toc
-    - navigation
 ---
 <style>
   .md-content__button {
@@ -10,6 +9,8 @@ hide:
 </style>
 
 # Technology Leader, Engineer at Heart, Continuous Learner
+
+
 <div class="portrait">
     <img src="./img/portrait1.drawio.svg">
 </div>
@@ -17,6 +18,18 @@ hide:
 
 # Recent Activity
 <section class="grid">
+    
+    <div class="card" style="width: 15rem;">
+        <div class="card-img">
+            <img src="./img/2021-07-25-blog-banner.drawio.svg" alt="Agent Based Logging">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Agent Based Logging</h5>
+            <h6 class="card-subtitle">July 25, 2021</h6>
+            <p class="card-text">Whether you're working in site reliability, business intelligence, or security, one thing rings true. Logs are king. They are a window into your operations, providing insights into access, change, per...</p>
+            <a href="./blog/2021-07-25-agent-based-logging.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
+        </div>
+    </div>
     
     <div class="card" style="width: 15rem;">
         <div class="card-img">

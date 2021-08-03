@@ -1,56 +1,56 @@
 site_name: Jason Bolden
 site_url: https://jbold569.github.io/profile/
 site_author: Jason Bolden
-
-use_directory_urls: False
-
+use_directory_urls: false
 repo_name: jbold569/profile
 repo_url: https://github.com/jbold569/profile
-#edit_uri: ""
-
 theme:
   name: material
   features:
-    - navigation.tabs
-    - navigation.top
-    - search.highlight
-    - search.share
-    - search.suggest
+  - navigation.tabs
+  - navigation.top
+  - search.highlight
+  - search.share
+  - search.suggest
   palette:
-    - media: '(prefers-color-scheme: light)'
-      scheme: default
-      primary: blue
-      toggle:
-        icon: material/toggle-switch-off-outline
-        name: Switch to dark mode
-    - media: '(prefers-color-scheme: dark)'
-      scheme: slate
-      toggle:
-        icon: material/toggle-switch
-        name: Switch to light mode
+  - media: '(prefers-color-scheme: light)'
+    scheme: default
+    primary: blue
+    toggle:
+      icon: material/toggle-switch-off-outline
+      name: Switch to dark mode
+  - media: '(prefers-color-scheme: dark)'
+    scheme: slate
+    toggle:
+      icon: material/toggle-switch
+      name: Switch to light mode
 nav:
-  - Home: index.md
-  - About: about.md
-  - Blogs:
-    - Content: blog/readme.md
-    - 2021:
-      - Automating Docs as Code: blog/2021-07-17-automating-docs-as-code.md
+- Home: index.md
+- About: about.md
+- Blogs:
+  - Content: blog/readme.md
+  - 2021:
+    - Agent Based Logging: blog/2021-07-25-agent-based-logging.md
+    - Automating Docs as Code: blog/2021-07-17-automating-docs-as-code.md
 markdown_extensions:
-  - admonition
-  - meta
-  - pymdownx.highlight:
-      linenums: True
-  - pymdownx.inlinehilite
-  - pymdownx.superfences
-  - pymdownx.details
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+- abbr
+- admonition
+- attr_list
+- meta
+- pymdownx.highlight:
+    linenums: true
+- pymdownx.inlinehilite
+- pymdownx.superfences
+- pymdownx.details
+- pymdownx.snippets
+- pymdownx.emoji:
+    emoji_index: !!python/name:materialx.emoji.twemoji ''
+    emoji_generator: !!python/name:materialx.emoji.to_svg ''
 extra:
   disqus: jbold569
   social:
-    - icon: fontawesome/brands/linkedin
-      link: https://www.linkedin.com/in/jason-bolden-37b55443/
-      name: Jason Bolden on LinkedIn
+  - icon: fontawesome/brands/linkedin
+    link: https://www.linkedin.com/in/jason-bolden-37b55443/
+    name: Jason Bolden on LinkedIn
 extra_css:
-  - stylesheets/custom.css
+- stylesheets/custom.css
