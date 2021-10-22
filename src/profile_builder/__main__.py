@@ -134,7 +134,7 @@ def cli():
 # @common_config_options
 def blog_command(templates, config, output_dir, mkdocs_file, **kwargs):
     """Generate new blog according to arguments"""
-    blog.blog(templates=templates, config=config, output_dir=output_dir, mkdocs_file=mkdocs_file, **kwargs)
+    blog.blog(templates=templates, config_file=config, output_dir=output_dir, mkdocs_file=mkdocs_file, **kwargs)
 
 # This command creates the blog digest page, explaining the site section and has recent posts at the bottom of the page as cards
 @cli.command(name="digest")
