@@ -15,19 +15,14 @@ jobs:
         id: get_latest_release
         with:
           query: |
-            query release($owner:String!,$repo:String!) {
-              repository(owner:$owner,name:$repo) {
-                discussions(first:1) {
-                  body
-                  nodes {
-                    name
-                    createdAt
+            mutation {
+              createDiscussion(input: {repositoryId: $repo_id, categoryId: "1", body: "test", title: "Test Title"}) {
+                discussion {
+                  id
                   }
-                }
               }
-            }
           owner: jbold569
-          repo: ${{ github.event.repository.name }}
+          repo_id: ${{ github.event.repository.id }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo 'latest release: ${{ steps.get_latest_release.outputs.data }}'"
