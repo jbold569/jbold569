@@ -18,7 +18,6 @@ jobs:
             query release($owner:String!,$repo:String!) {
               repository(owner:$owner,name:$repo) {
                 discussions(first:1) {
-                  author
                   body
                   nodes {
                     name
