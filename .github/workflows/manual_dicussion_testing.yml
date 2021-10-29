@@ -17,17 +17,17 @@ jobs:
           query: |
             query release($owner:String!,$repo:String!) {
               repository(owner:$owner,name:$repo) {
-                releases(first:1) {
+                discussions(first:1) {
+                  author
+                  body
                   nodes {
                     name
                     createdAt
-                    tagName
-                    description
                   }
                 }
               }
             }
-          owner: ${{ github.event.repository.owner.name }}
+          owner: jbold569
           repo: ${{ github.event.repository.name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
