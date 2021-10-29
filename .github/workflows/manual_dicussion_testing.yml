@@ -19,8 +19,9 @@ jobs:
               createDiscussion(input: {repositoryId: $repo_id, categoryId: "1", body: "test", title: "Test Title"}) {
                 discussion {
                   id
-                  }
+                }
               }
+            }
           owner: jbold569
           repo_id: ${{ github.event.repository.id }}
         env:
