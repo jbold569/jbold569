@@ -50,6 +50,18 @@ Welcome to my collection of thoughts, lessons learned, and experiments. I've gat
     
     <div class="card" style="width: 15rem;">
         <div class="card-img">
+            <img src="../img/2021-11-02-blog-banner.drawio.svg" alt="Hello, GitHub Discussions! Goodbye, Disqus...">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Hello, GitHub Discussions! Goodbye, Disqus...</h5>
+            <h6 class="card-subtitle">November 02, 2021</h6>
+            <p class="card-text">In short, I don't like the free version of Disqus. ADs serve a purpose in this world, and they often allow us to enjoy a lot of valuable content at the cost of a portion of our attention. However, I d...</p>
+            <a href="./2021-11-02-hello-github-discussions-goodbye-disqus.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
+        </div>
+    </div>
+    
+    <div class="card" style="width: 15rem;">
+        <div class="card-img">
             <img src="../img/2021-07-25-blog-banner.drawio.svg" alt="Agent Based Logging">
         </div>
         <div class="card-body">
