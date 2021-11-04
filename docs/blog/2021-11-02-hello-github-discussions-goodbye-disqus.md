@@ -1,7 +1,7 @@
 ---
 disqus: ""
 title: Hello, GitHub Discussions! Goodbye, Disqus...
-description: In short, I don't like the free version of Disqus. ADs serve a purpose in this world, and they often allow us to enjoy a lot of valuable content at the cost of a portion of our attention. However, I don't want them on my blog. Instead, let's leverage some of the native functionality of GitHub and create a Discussion thread when a new post is published to the blog; all automated, of course.
+description: In short, I don't like the free version of Disqus. Ads serve a purpose in this world, and they often allow us to enjoy a lot of valuable content at the cost of a portion of our attention. However, I don't want them on my blog. Instead, let's leverage some of the native functionality of GitHub and create a Discussion thread when a new post is published to the blog; all automated, of course.
 publish_date: 2021-11-02
 filename: 2021-11-02-hello-github-discussions-goodbye-disqus
 ---
