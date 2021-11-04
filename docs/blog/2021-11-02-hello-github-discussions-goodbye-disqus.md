@@ -27,7 +27,7 @@ filename: 2021-11-02-hello-github-discussions-goodbye-disqus
 *Posted by [Jason Bolden](../about.md) on Nov 02, 2021*
 
 
-In short, I don't like the free version of Disqus. ADs serve a purpose in this world, and they often allow us to enjoy a lot of valuable content at the cost of a portion of our attention. However, I don't want them on my blog. Instead, let's leverage some of the native functionality of GitHub and create a Discussion thread when a new post is published to the blog; all automated, of course.
+In short, I don't like the free version of Disqus. Ads serve a purpose in this world, and they often allow us to enjoy a lot of valuable content at the cost of a portion of our attention. However, I don't want them on my blog. Instead, let's leverage some of the native functionality of GitHub and create a Discussion thread when a new post is published to the blog; all automated, of course.
 
 ## Objective
 Referencing the previous post on [Documentation Automation](./2021-07-17-automating-docs-as-code.html), we intend to make a minor change to the existing flow. The reason why one would want to do this is to further consolidate the developer experience and make our repo a one-stop shop for all things concerning the project.
@@ -58,62 +58,65 @@ The details behind GraphQL fall outside the scope of this post; however GitHub p
   <figcaption>Figure 3 - GraphQL DiscussionCategories Query</figcaption>
 </figure>
 
-```graphql hl_lines="2-4 8"
+```graphql hl_lines="2 5 6"
 query DiscussionCategory {
-  repository(name: "profile", owner: "jbold569") {
-    discussionCategories(first: 10) {
-      nodes {
-        name
+    repository(name: "profile", owner: "jbold569") {
+        discussionCategories(first: 10) {
+            nodes {
+                name
+                id
+            }
+        }
         id
-      }
     }
-    id
-  }
 }
 ```
 
 ```json
 {
-  "data": {
-    "repository": {
-      "discussionCategories": {
-        "nodes": [
-          {
-            "name": "Announcements",
-            "id": "DIC_kwDOFjAb884B_pJC"
-          },
-          {
-            "name": "General",
-            "id": "DIC_kwDOFjAb884B_pJD"
-          },
-          {
-            "name": "Q&A",
-            "id": "DIC_kwDOFjAb884B_pJE"
-          },
-          {
-            "name": "Ideas",
-            "id": "DIC_kwDOFjAb884B_pJF"
-          },
-          {
-            "name": "Show and tell",
-            "id": "DIC_kwDOFjAb884B_pJG"
-          },
-          {
-            "name": "Polls",
-            "id": "DIC_kwDOFjAb884B_pJH"
-          },
-          {
-            "name": "Blog",
-            "id": "DIC_kwDOFjAb884B_pOx"
-          }
-        ]
-      },
-      "id": "MDEwOlJlcG9zaXRvcnkzNzIyNTE2MzU="
+    "data": {
+        "repository": {
+            "discussionCategories": {
+                "nodes": [
+                {
+                    "name": "Announcements",
+                    "id": "DIC_kwDOFjAb884B_pJC"
+                },
+                {
+                    "name": "General",
+                    "id": "DIC_kwDOFjAb884B_pJD"
+                },
+                {
+                    "name": "Q&A",
+                    "id": "DIC_kwDOFjAb884B_pJE"
+                },
+                {
+                    "name": "Ideas",
+                    "id": "DIC_kwDOFjAb884B_pJF"
+                },
+                {
+                    "name": "Show and tell",
+                    "id": "DIC_kwDOFjAb884B_pJG"
+                },
+                {
+                    "name": "Polls",
+                    "id": "DIC_kwDOFjAb884B_pJH"
+                },
+                {
+                    "name": "Blog",
+                    "id": "DIC_kwDOFjAb884B_pOx"
+                }
+                ]
+            },
+            "id": "MDEwOlJlcG9zaXRvcnkzNzIyNTE2MzU="
+        }
     }
-  }
 }
 ```
-```graphql
+
+The GraphQL explorer returns a JSON payload with information required for the next step. Without this step, The Mutation call wouldn't know which repository to create the new Discussion in nor what category to assign it.
+
+```graphql hl_lines="3 5"
 mutation CreateDiscussion {
   __typename
   createDiscussion(input: {repositoryId: "MDEwOlJlcG9zaXRvcnkzNzIyNTE2MzU=", title: "Explorer Test", body: "This is a discussion made via the GraphQL Explorer!", categoryId: "DIC_kwDOFjAb884B_pOx", clientMutationId: ""}) {
@@ -123,6 +126,7 @@ mutation CreateDiscussion {
   }
 }
 ```
+
 ```json
 {
   "data": {
@@ -142,56 +146,57 @@ mutation CreateDiscussion {
 </figure>
 
 !!! Attention
-    Adding the discussion number will be useful in a later enhancement to this flow. I'll expand more on this at the conclusion of this post.
+    On line 5 of the mutation snippet, we specified to return the value of the `number` field for the new discussion. Having the discussion number will be useful in a later enhancement to this flow. I'll expand more on this at the conclusion of this post.
 
 ### GitHub GraphQL Action
-Now that we've establish what API calls we need to make the discussion and tested them manually, let's begin building out the automation to add this to our pipeline. [Octokit](https://docs.github.com/en/rest/overview/libraries) maintains a repo, [graphql-action](https://github.com/octokit/graphql-action), that allows you to make calls to the GitHub GraphQL API via a GitHub Action.
+Now that we've establish what API calls we need to make the discussion and tested them manually, let's build out the automation to add this to our pipeline. The steps we want to inject into our workflow are as follows:
 
-```yaml
+<figure>
+  <img src="../img/2021-11-02-action-workflow.drawio.svg"/>
+  <figcaption>Figure 6 - 3 new action steps</figcaption>
+</figure>
+
+[Octokit](https://docs.github.com/en/rest/overview/libraries) maintains a repo, [graphql-action](https://github.com/octokit/graphql-action), that allows you to make calls to the GitHub GraphQL API via a GitHub Action. At this time, it's limited to only GraphQL queries, so we'll also explore how to make calls using cURL for the mutation portion.
+
+```yaml hl_lines="6 17 18"
 - name: Query GraphQL for Ids
   uses: octokit/graphql-action@v2.x
   id: get_ids
   with:
     query: |
-    query ids($owner:String!,$repo:String!) { 
+      query ids($owner:String!,$repo:String!) { 
         repository(owner:$owner,name:$repo) {
-        discussionCategories(first: 10) {
+          discussionCategories(first: 10) {
             nodes {
-            name
-            id
+              name
+              id
             }
+          }
+          id
         }
-        id
-        }
-    }
+      }
     owner: ${{ github.event.repository.owner.login }}
     repo: ${{ github.event.repository.name }}
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-```yaml
-- name: Create Discussion cURL
-  id: create_discussion
-  run: |
-    curl -H "Authorization: bearer ${{env.GITHUB_TOKEN }}" -X POST -d " \
-    { \
-    \"query\": \"mutation { createDiscussion(input: {repositoryId: \\\"${{ env.repository_id }}\\\", title: \\\"${{ env.title }}\\\", body: \\\"${{ env.body }}\\\", categoryId: \\\"${{ env.category_id }}\\\"}) { discussion { number } } }\" \
-    } \
-    " https://api.github.com/graphql
-    
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    repository_id: ${{ env.repositoryId }}
-    title: ${{ github.event.issue.title }}
-    body: "This discussion was made by GitHub Actions"
-    category_id: ${{ env.categoryId }}
-```
+The `octokit/graphql-action` allows us to copy/paste the query we developed in the explorer with the exception of defining the variables and their types being passed to the query; similar to a function definition. Lines 17 and 18 pull the repository name and owner login from the action event object rather than hardcoded values previously.
 
-The question now is, how do we pull the Id's from the json returned by the initial query? Introducing, jq
 
-```yaml
+!!! Attention
+    The `octokit/graphql-action` documentation references the use of `github.event.repository.owner.name`. That value is not present in the webhook event [payload object](https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#webhook-payload-object-common-properties). It should be `github.event.repository.owner.login`
+
+The question now is, how do we pull the Id's from the json returned by the initial query? Introducing, [jq](https://stedolan.github.io/jq/). `jq` is a handy command-line utility that makes processing JSON a easier. We're going to use it to extract the Id's and assign them to [environment variables](https://docs.github.com/en/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-environment-variable) for our next workflow step.
+
+<figure>
+  <img src="../img/2021-11-02-jqplay.drawio.svg"/>
+  <figcaption>Figure 5 - jqplay query builder output</figcaption>
+</figure>
+
+```yaml hl_lines="5 6"
 - name: Extract Ids
+  id: extract_ids
   env:
     JSON_DATA: ${{ steps.get_ids.outputs.data}}
   run: >
@@ -199,14 +204,23 @@ The question now is, how do we pull the Id's from the json returned by the initi
     echo "categoryId=$(echo ${JSON_DATA} | jq '.repository.discussionCategories.nodes[] | select(.name == "Blog") | .id')" >> $GITHUB_ENV
 ```
 
-<figure>
-  <img src="../img/2021-11-02-jqplay.drawio.svg"/>
-  <figcaption>Figure 5 - jqplay query builder output</figcaption>
-</figure>
+At the time of writing, the `octokit/graphql-action` action did not support mutations 😢. Luckily there's a fallback. The GitHub GraphQL API can be queried using [http requests](https://docs.github.com/en/github-ae@latest/graphql/guides/forming-calls-with-graphql#communicating-with-graphql). Knowing this, we can instead form a JSON payload containing our mutation statement and send it via cURL. It's messy (lots of debugging escape-characters), but it gets the job done.
 
-!!! Attention
-    github.event.repository.owner.login!!!!
-
+```yaml
+- name: Create Discussion cURL
+  id: create_discussion
+  run: |
+    curl -H "Authorization: bearer ${{env.GITHUB_TOKEN }}" -X POST -d " \
+    { \
+    \"query\": \"mutation { createDiscussion(input: {repositoryId: \\\"${{ env.repositoryId }}\\\", title: \\\"${{ env.title }}\\\", body: \\\"${{ env.body }}\\\", categoryId: \\\"${{ env.categoryId }}\\\"}) { discussion { number } } }\" \
+    } \
+    " https://api.github.com/graphql
+    
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    title: ${{ github.event.issue.title }}
+    body: "This discussion was made by GitHub Actions"
+```
 
 <figure>
   <img src="../img/2021-11-02-github-action-discussion.drawio.svg"/>
@@ -214,45 +228,15 @@ The question now is, how do we pull the Id's from the json returned by the initi
 </figure>
 
 ## Conclusion
+We'll stop here for the scope of this post. There are some other things that could be added to the 
+
 ## References
 
-https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions
-https://docs.github.com/en/graphql/guides/introduction-to-graphql
-https://jqplay.org/
-https://docs.github.com/en/developers/webhooks-and-events/webhooks
+- [GitHub GraphQL API for Discussions](https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions)
+- [GitHub GraphQL Intro](https://docs.github.com/en/graphql/guides/introduction-to-graphql)
+- [jq](https://jqplay.org/)
+- [GitHub Webhook Events and Payloads](https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads)
+- [GitHub GraphQL cURL](https://docs.github.com/en/github-ae@latest/graphql/guides/forming-calls-with-graphql#communicating-with-graphql)
 
 ## Comment
-Continue the discussion [here]()
-# Cheatsheet
-## [Admonitions](https://squidfunk.github.io/mkdocs-material/reference/admonitions/#supported-types)
-!!! note
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
-    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
-    massa, nec semper lorem quam in massa.
-
-??? note
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
-    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
-    massa, nec semper lorem quam in massa.
-
-!!! note ""
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
-    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
-    massa, nec semper lorem quam in massa.
-
-!!! note "Other Title"
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
-    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
-    massa, nec semper lorem quam in massa.
-
-!!! note
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
-    nulla. Curabitur feugiat, tortor non 
-    
-    ```python
-        import re
-        print("Hello World!")
-    ```
-
-    consequat finibus, justo purus auctor
-    massa, nec semper lorem quam in massa.
+Continue the discussion [here](https://github.com/jbold569/profile/discussions/19)
