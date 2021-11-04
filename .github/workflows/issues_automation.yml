@@ -22,7 +22,7 @@ jobs:
           git checkout -b ${{env.BRANCH_NAME}}
       
       - name: Echo the event object
-        run: echo "${{ github.event }}"
+        run: echo "${{ toJson(github.event) }}"
       
       - name: Query GraphQL for Ids
         uses: octokit/graphql-action@v2.x
