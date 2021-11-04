@@ -45,4 +45,48 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "generated ${{env.BRANCH_NAME}}"
-          git push --set-upstream origin ${{env.BRANCH_NAME}}    
+          git push --set-upstream origin ${{env.BRANCH_NAME}}
+      
+      - name: Query GraphQL for Ids
+        uses: octokit/graphql-action@v2.x
+        id: get_ids
+        with:
+          query: |
+            query repository(owner:$owner,name:$repo) {
+              discussionCategories(first: 10) {
+                nodes {
+                  name
+                  id
+                }
+              }
+              id
+            }
+          owner: ${{ github.event.repository.owner.name }}
+          repo: ${{ github.event.repository.name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract Ids
+        env:
+          JSON_DATA: ${{ steps.get_ids.outputs.data}}
+        run: >
+          echo "repositoryId=$(echo ${JSON_DATA} | jq '.repository.id')" >> $GITHUB_ENV
+          echo "categoryId=$(echo ${JSON_DATA} | jq '.repository.discussionCategories.nodes[] | select(.name == "Blog") | .id')" >> $GITHUB_ENV    
+      
+      - name: Create Discussion
+        uses: octokit/graphql-action@v2.x
+        id: create_discussion
+        with:
+          query: |
+              mutation {
+                  createDiscussion(input: {repositoryId: $repositoryId, title: $discussionTitle, body: $discussionBody, categoryId: $categoryId}) {
+                  discussion {
+                      number
+                  }
+              }
+          repositoryId: ${{ env.repositoryId }}
+          title: ${{ github.event.issue.title }}
+          body: "This discussion was made by GitHub Actions"
+          categoryId: ${{ env.categoryId }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
