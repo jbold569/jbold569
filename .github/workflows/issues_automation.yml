@@ -20,20 +20,22 @@ jobs:
       - name: Create new Blog Branch
         run: |
           git checkout -b ${{env.BRANCH_NAME}}
-      
+          
       - name: Query GraphQL for Ids
         uses: octokit/graphql-action@v2.x
         id: get_ids
         with:
           query: |
-            query repository(owner:$owner,name:$repo) {
-              discussionCategories(first: 10) {
-                nodes {
-                  name
-                  id
+            query ids($owner:String!,$repo:String!) { 
+              repository(owner:$owner,name:$repo) {
+                discussionCategories(first: 10) {
+                  nodes {
+                    name
+                    id
+                  }
                 }
+                id
               }
-              id
             }
           owner: ${{ github.event.repository.owner.login }}
           repo: ${{ github.event.repository.name }}
@@ -52,7 +54,7 @@ jobs:
         id: create_discussion
         with:
           query: |
-              mutation {
+              mutation discussion($repositoryId: ID!, $title: String!, $body: String!, $categoryId: ID!{
                   createDiscussion(input: {repositoryId: $repositoryId, title: $discussionTitle, body: $discussionBody, categoryId: $categoryId}) {
                   discussion {
                       number
