@@ -67,6 +67,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Create Discussion
+        uses: octokit/graphql-action@v2.x
+        id: create_discussion
+        run: |
+          curl -H "Authorization: bearer ${{env.GITHUB_TOKEN }} -X POST -d " \
+          { \
+            \"query\": \" mutation discussion{ createDiscussion(input: {repository_id: \"${{ env.repository_id }}\", title: \"${{ env.title }}\", body: \"${{ env.body }}\", categoryId: \"${{ env.category_id }}\"}) { discussion { number } }
+          } \
+          " https://api.github.com/graphql
+          
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          repository_id: ${{ env.repositoryId }}
+          title: ${{ github.event.issue.title }}
+          body: "This discussion was made by GitHub Actions"
+          category_id: ${{ env.categoryId }}
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
