@@ -49,26 +49,25 @@ jobs:
           echo "repositoryId=$(echo ${JSON_DATA} | jq '.repository.id')" >> $GITHUB_ENV;
           echo "categoryId=$(echo ${JSON_DATA} | jq '.repository.discussionCategories.nodes[] | select(.name == "Blog") | .id')" >> $GITHUB_ENV;
       
-      - name: Create Discussion
-        uses: octokit/graphql-action@v2.x
-        id: create_discussion
-        with:
-          query: |
-              mutation discussion($repository_id: ID!, $title: String!, $body: String!, $category_id: ID!) {
-                  createDiscussion(input: {repository_id: $repository_id, title: $title, body: $body, categoryId: $categoryId}) {
-                  discussion {
-                      number
-                  }
-              }
-          repository_id: ${{ env.repositoryId }}
-          title: ${{ github.event.issue.title }}
-          body: "This discussion was made by GitHub Actions"
-          category_id: ${{ env.categoryId }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Create Discussion
+      #   uses: octokit/graphql-action@v2.x
+      #   id: create_discussion
+      #   with:
+      #     query: |
+      #         mutation discussion($repository_id: ID!, $title: String!, $body: String!, $category_id: ID!) {
+      #             createDiscussion(input: {repository_id: $repository_id, title: $title, body: $body, categoryId: $categoryId}) {
+      #             discussion {
+      #                 number
+      #             }
+      #         }
+      #     repository_id: ${{ env.repositoryId }}
+      #     title: ${{ github.event.issue.title }}
+      #     body: "This discussion was made by GitHub Actions"
+      #     category_id: ${{ env.categoryId }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Create Discussion
-        uses: octokit/graphql-action@v2.x
+      - name: Create Discussion cURL
         id: create_discussion
         run: |
           curl -H "Authorization: bearer ${{env.GITHUB_TOKEN }} -X POST -d " \
