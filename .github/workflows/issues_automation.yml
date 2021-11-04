@@ -21,7 +21,9 @@ jobs:
         run: |
           git checkout -b ${{env.BRANCH_NAME}}
       
-      - run: echo "${{ github.event }}"
+      - name: Echo the event object
+        run: echo "${{ github.event }}"
+      
       - name: Query GraphQL for Ids
         uses: octokit/graphql-action@v2.x
         id: get_ids
@@ -36,7 +38,7 @@ jobs:
               }
               id
             }
-          owner: ${{ github.event.repository.owner }}
+          owner: ${{ github.event.issue.repository.owner.name }}
           repo: ${{ github.event.repository.name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
