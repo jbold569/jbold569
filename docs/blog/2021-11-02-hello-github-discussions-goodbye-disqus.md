@@ -1,4 +1,5 @@
 ---
+disqus: ""
 title: Hello, GitHub Discussions! Goodbye, Disqus...
 description: In short, I don't like the free version of Disqus. ADs serve a purpose in this world, and they often allow us to enjoy a lot of valuable content at the cost of a portion of our attention. However, I don't want them on my blog. Instead, let's leverage some of the native functionality of GitHub and create a Discussion thread when a new post is published to the blog; all automated, of course.
 publish_date: 2021-11-02
@@ -30,7 +31,7 @@ filename: 2021-11-02-hello-github-discussions-goodbye-disqus
 In short, I don't like the free version of Disqus. Ads serve a purpose in this world, and they often allow us to enjoy a lot of valuable content at the cost of a portion of our attention. However, I don't want them on my blog. Instead, let's leverage some of the native functionality of GitHub and create a Discussion thread when a new post is published to the blog; all automated, of course.
 
 ## Objective
-Referencing the previous post on [Documentation Automation](./2021-07-17-automating-docs-as-code.html), we intend to make a minor change to the existing flow. The reason why one would want to do this is to further consolidate the developer experience and make our repo a one-stop shop for all things concerning the project.
+Referencing the previous post on [Documentation Automation](./2021-07-17-automating-docs-as-code.html), we intend to make a minor change to the existing flow. The reason why one would want to do this is to further consolidate the developer experience by adding a forum for collaborative communication linked to published content within the project.
 
 <figure>
   <img src="../img/2021-11-02-conceptual.drawio.svg"/>
@@ -38,10 +39,10 @@ Referencing the previous post on [Documentation Automation](./2021-07-17-automat
 </figure>
 
 ## The Breakdown
-We'll look at all the pieces necessary to add the new automation steps and tie them all together in the end.
+We'll start by explaining all the pieces necessary to add the new automation steps and tie them all together in the end.
 
 ### GitHub Discussions GraphQL API
-GitHub recently released their [GraphQL API for Discussions](https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions). For our work flow, we want to create a new Discussion when a new Blog Post issue is assigned. To figure out how to programmatically do this, let's reference the docs and leverage the [GitHub GraphQL Explorer](https://docs.github.com/en/graphql/overview/explorer).
+GitHub recently released their [GraphQL API for Discussions](https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions). For our workflow, we want to create a new Discussion when a new Blog Post issue is assigned. To figure out how to programmatically do this, let's reference the docs and leverage the [GitHub GraphQL Explorer](https://docs.github.com/en/graphql/overview/explorer).
 
 <figure>
   <img src="../img/2021-11-02-graphql-explorer.drawio.svg"/>
@@ -153,7 +154,7 @@ Now that we've establish what API calls we need to make the discussion and teste
 
 <figure>
   <img src="../img/2021-11-02-action-workflow.drawio.svg"/>
-  <figcaption>Figure 6 - 3 new action steps</figcaption>
+  <figcaption>Figure 6 - New action steps</figcaption>
 </figure>
 
 [Octokit](https://docs.github.com/en/rest/overview/libraries) maintains a repo, [graphql-action](https://github.com/octokit/graphql-action), that allows you to make calls to the GitHub GraphQL API via a GitHub Action. At this time, it's limited to only GraphQL queries, so we'll also explore how to make calls using cURL for the mutation portion.
@@ -181,7 +182,7 @@ Now that we've establish what API calls we need to make the discussion and teste
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-The `octokit/graphql-action` allows us to copy/paste the query we developed in the explorer with the exception of defining the variables and their types being passed to the query; similar to a function definition. Lines 17 and 18 pull the repository name and owner login from the action event object rather than hardcoded values previously.
+The `octokit/graphql-action` allows us to basically copy/paste the query we developed in the explorer with the exception of defining the variables and their types being passed to the query; similar to a function definition. Lines 17 and 18 pull the repository name and owner login from the action event object rather than hardcoded values seen previously.
 
 
 !!! Attention
@@ -194,7 +195,7 @@ The question now is, how do we pull the Id's from the json returned by the initi
   <figcaption>Figure 5 - jqplay query builder output</figcaption>
 </figure>
 
-```yaml hl_lines="5 6"
+```yaml hl_lines="6 7"
 - name: Extract Ids
   id: extract_ids
   env:
@@ -228,7 +229,14 @@ At the time of writing, the `octokit/graphql-action` action did not support muta
 </figure>
 
 ## Conclusion
-We'll stop here for the scope of this post. There are some other things that could be added to the 
+We'll stop here for the scope of this post. There are some other things that could be added to further enhance the automation:
+
+- Inject the url to the new discussion in the `profile_builder` module so it can be added to the new blog post template automatically. Discussions urls match the pattern: `/<owner>/<repository>/discussions/<discussion_number>` (recall that we purposefully captured that number after the mutation call)
+- Programmatically add the link to the new Blog Post to the Discussion Body. 
+- Assign different discussion categories or use a different body template based on issue labels
+
+Let's take a look at the bigger picture for a second. [Discussions](https://youtu.be/IpBw2SJkFyk) were created to facilitate collaborative communication about a project. Assuming you're a maintainer for a project on GitHub and you have a project site for publishing posts, tying these posts to a discussion just makes sense if you value community around your product. The bonus here being, Discussions are built into the GitHub ecosystem and are tied directly to your project. Fewer dependencies, less context switching, it's awesome! 
+
 
 ## References
 
@@ -239,4 +247,4 @@ We'll stop here for the scope of this post. There are some other things that cou
 - [GitHub GraphQL cURL](https://docs.github.com/en/github-ae@latest/graphql/guides/forming-calls-with-graphql#communicating-with-graphql)
 
 ## Comment
-Continue the discussion [here](https://github.com/jbold569/profile/discussions/19)
+Continue the discussion [here](https://github.com/jbold569/profile/discussions/19)!
