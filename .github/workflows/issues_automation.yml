@@ -72,7 +72,7 @@ jobs:
         run: |
           curl -H "Authorization: bearer ${{env.GITHUB_TOKEN }}" -X POST -d " \
           { \
-            \"query\": \"mutation discussion{ createDiscussion(input: {repository_id: '${{ env.repository_id }}', title: '${{ env.title }}', body: '${{ env.body }}', categoryId: '${{ env.category_id }}'}) { discussion { number } }\" \
+            \"query\": \"mutation discussion{ createDiscussion(input: {repository_id: \\\"${{ env.repository_id }}\\\", title: \\\"${{ env.title }}\\\", body: \\\"${{ env.body }}\\\", categoryId: \\\"${{ env.category_id }}\\\"}) { discussion { number } }\" \
           } \
           " https://api.github.com/graphql
           
