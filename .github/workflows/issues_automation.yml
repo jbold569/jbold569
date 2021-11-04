@@ -54,7 +54,7 @@ jobs:
         id: create_discussion
         with:
           query: |
-              mutation discussion($repositoryId: ID!, $title: String!, $body: String!, $categoryId: ID!{
+              mutation discussion($repositoryId: ID!, $title: String!, $body: String!, $categoryId: ID!) {
                   createDiscussion(input: {repositoryId: $repositoryId, title: $discussionTitle, body: $discussionBody, categoryId: $categoryId}) {
                   discussion {
                       number
