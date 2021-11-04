@@ -89,4 +89,3 @@ jobs:
           git add .
           git commit -m "generated ${{env.BRANCH_NAME}}"
           git push --set-upstream origin ${{env.BRANCH_NAME}}
-      
