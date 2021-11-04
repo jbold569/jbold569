@@ -54,16 +54,16 @@ jobs:
         id: create_discussion
         with:
           query: |
-              mutation discussion($repositoryId: ID!, $title: String!, $body: String!, $categoryId: ID!) {
-                  createDiscussion(input: {repositoryId: $repositoryId, title: $discussionTitle, body: $discussionBody, categoryId: $categoryId}) {
+              mutation discussion($repository_id: ID!, $title: String!, $body: String!, $category_id: ID!) {
+                  createDiscussion(input: {repository_id: $repository_id, title: $title, body: $body, categoryId: $categoryId}) {
                   discussion {
                       number
                   }
               }
-          repositoryId: ${{ env.repositoryId }}
+          repository_id: ${{ env.repositoryId }}
           title: ${{ github.event.issue.title }}
           body: "This discussion was made by GitHub Actions"
-          categoryId: ${{ env.categoryId }}
+          category_id: ${{ env.categoryId }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
