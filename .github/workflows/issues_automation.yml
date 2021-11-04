@@ -43,46 +43,27 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Extract Ids
+        id: extract_ids
         env:
           JSON_DATA: ${{ steps.get_ids.outputs.data}}
         run: >
           echo "repositoryId=$(echo ${JSON_DATA} | jq -r '.repository.id')" >> $GITHUB_ENV;
           echo "categoryId=$(echo ${JSON_DATA} | jq -r '.repository.discussionCategories.nodes[] | select(.name == "Blog") | .id')" >> $GITHUB_ENV;
       
-      # - name: Create Discussion
-      #   uses: octokit/graphql-action@v2.x
-      #   id: create_discussion
-      #   with:
-      #     query: |
-      #         mutation discussion($repository_id: ID!, $title: String!, $body: String!, $category_id: ID!) {
-      #             createDiscussion(input: {repository_id: $repository_id, title: $title, body: $body, categoryId: $categoryId}) {
-      #             discussion {
-      #                 number
-      #             }
-      #         }
-      #     repository_id: ${{ env.repositoryId }}
-      #     title: ${{ github.event.issue.title }}
-      #     body: "This discussion was made by GitHub Actions"
-      #     category_id: ${{ env.categoryId }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
       - name: Create Discussion cURL
         id: create_discussion
         run: |
           curl -H "Authorization: bearer ${{env.GITHUB_TOKEN }}" -X POST -d " \
           { \
-            \"query\": \"mutation { createDiscussion(input: {repositoryId: \\\"${{ env.repository_id }}\\\", title: \\\"${{ env.title }}\\\", body: \\\"${{ env.body }}\\\", categoryId: \\\"${{ env.category_id }}\\\"}) { discussion { number } } }\" \
+            \"query\": \"mutation { createDiscussion(input: {repositoryId: \\\"${{ env.repositoryId }}\\\", title: \\\"${{ env.title }}\\\", body: \\\"${{ env.body }}\\\", categoryId: \\\"${{ env.categoryId }}\\\"}) { discussion { number } } }\" \
           } \
           " https://api.github.com/graphql
           
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          repository_id: ${{ env.repositoryId }}
           title: ${{ github.event.issue.title }}
           body: "This discussion was made by GitHub Actions"
-          category_id: ${{ env.categoryId }}
-
+          
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
@@ -108,4 +89,3 @@ jobs:
           git add .
           git commit -m "generated ${{env.BRANCH_NAME}}"
           git push --set-upstream origin ${{env.BRANCH_NAME}}
-      
