@@ -53,11 +53,12 @@ jobs:
       - name: Create Discussion cURL
         id: create_discussion
         run: |
-          curl -H "Authorization: bearer ${{env.GITHUB_TOKEN }}" -X POST -d " \
+          resp = $(curl -H "Authorization: bearer ${{env.GITHUB_TOKEN }}" -X POST -d " \
           { \
             \"query\": \"mutation { createDiscussion(input: {repositoryId: \\\"${{ env.repositoryId }}\\\", title: \\\"${{ env.title }}\\\", body: \\\"${{ env.body }}\\\", categoryId: \\\"${{ env.categoryId }}\\\"}) { discussion { number } } }\" \
           } \
-          " https://api.github.com/graphql
+          " https://api.github.com/graphql)
+          echo "::set-output name=data::$(echo ${resp} | jq -r '.data')"
           
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -69,7 +70,7 @@ jobs:
         env:
           JSON_DATA: ${{ steps.create_discussion.outputs.data}}
         run: >
-          echo "discussionNumber=$(echo ${JSON_DATA} | jq -r '.createDiscussion.discussion.number'" >> $GITHUB_ENV;
+          echo "discussionNumber=$(echo ${JSON_DATA} | jq -r '.createDiscussion.discussion.number')" >> $GITHUB_ENV;
 
       - name: Setup Python
         uses: actions/setup-python@v2
