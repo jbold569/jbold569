@@ -87,7 +87,7 @@ jobs:
           cat src/config.yml
           cd src
           python -m profile_builder blog -t ./templates -o ../docs/blog -c ./config.yml \
-          -C "discussion_url:https://github.com/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/discussions/${{ env.discussionNumber }} -v
+          -C "discussion_url:https://github.com/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/discussions/${{ env.discussionNumber }}" -v
           python -m profile_builder digest -t ./templates/home-digest.md.j2 -l 3 -i ../docs/blog -o ../docs/index.md -v
           python -m profile_builder digest -t ./templates/blog-digest.md.j2 -l 3 -i ../docs/blog -o ../docs/blog/readme.md -v
           rm config.yml
