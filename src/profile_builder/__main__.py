@@ -127,14 +127,15 @@ def cli():
 
 @cli.command(name="blog")
 @click.option('-t', '--templates', type=click.Path(), help='template help', default='./templates')
-@click.option('-c', '--config', type=click.File(), help='config help', default='./config.yml')
+@click.option('-c', '--config-file', type=click.File(), help='config help', default='./config.yml')
+@click.option('-C', '--config', help='config help', multiple=True)
 @click.option('-o', '--output-dir', type=click.Path(), help="output help", default='../docs/blog')
 @click.option('-m', '--mkdocs-file', type=click.File(), help="mkdocs help", default='../mkdocs.yml')
 @common_options
 # @common_config_options
-def blog_command(templates, config, output_dir, mkdocs_file, **kwargs):
+def blog_command(templates, config_file, config, output_dir, mkdocs_file, **kwargs):
     """Generate new blog according to arguments"""
-    blog.blog(templates=templates, config_file=config, output_dir=output_dir, mkdocs_file=mkdocs_file, **kwargs)
+    blog.blog(templates=templates, config_file=config_file, configs=config, output_dir=output_dir, mkdocs_file=mkdocs_file, **kwargs)
 
 # This command creates the blog digest page, explaining the site section and has recent posts at the bottom of the page as cards
 @cli.command(name="digest")

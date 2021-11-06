@@ -6,3 +6,5 @@ __pycache__/
 todo.md
 
 site/
+
+src/config.yml

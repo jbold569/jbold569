@@ -17,7 +17,7 @@ from profile_builder import utils
 
 log = logging.getLogger(__name__)
 
-def blog(templates=None, config_file=None, output_dir=None, mkdocs_file=None, **kwargs):
+def blog(templates=None, config_file=None, configs=None, output_dir=None, mkdocs_file=None, **kwargs):
     """
     Create the directory structure and templates for a new blog entry
     
@@ -30,6 +30,10 @@ def blog(templates=None, config_file=None, output_dir=None, mkdocs_file=None, **
         config = load_config(
             config_file=config_file,
         )
+        if configs:
+            addition = dict(list(map(lambda elem: tuple(elem.split(':',1)), configs)))
+            config = {**config, **addition}
+        print(config)
         return config
 
     # add new blog to mkdocs config

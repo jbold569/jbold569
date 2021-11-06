@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BRANCH_NAME: blog/issue${{github.event.issue.number}}
-      PYTHON_VERSION: 3.8
+      PYTHON_VERSION: 3.10
       
     steps:
       - name: Blog Post Issue Checkout main
@@ -63,7 +63,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ github.event.issue.title }}
           body: "This discussion was made by GitHub Actions"
-          
+
+      - name: Extract Discussion Number
+        id: extract_discussion_number
+        env:
+          JSON_DATA: ${{ steps.create_discussion.outputs.data}}
+        run: >
+          echo "discussionNumber=$(echo ${JSON_DATA} | jq -r '.createDiscussion.discussion.number')" >> $GITHUB_ENV;
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
@@ -79,7 +86,8 @@ jobs:
           echo "${{github.event.issue.body}}" > src/config.yml
           cat src/config.yml
           cd src
-          python -m profile_builder blog -t ./templates -o ../docs/blog -c ./config.yml -v
+          python -m profile_builder blog -t ./templates -o ../docs/blog -c ./config.yml \
+          -C "discussion_url:https://github.com/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/discussions/${{ env.discussionNumber }} -v
           python -m profile_builder digest -t ./templates/home-digest.md.j2 -l 3 -i ../docs/blog -o ../docs/index.md -v
           python -m profile_builder digest -t ./templates/blog-digest.md.j2 -l 3 -i ../docs/blog -o ../docs/blog/readme.md -v
           rm config.yml
