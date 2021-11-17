@@ -40,8 +40,9 @@ The `add` command creates a new document and adds it to the archive. The followi
 
 <figure>
   <img src="../img/2021-11-17-add-help.drawio.svg"/>
-  <figcaption>Figure 2 - Proposed options for `add`</figcaption>
+    <figcaption>Figure 2 - Proposed options for <code>add</code></figcaption>
 </figure>
+
 Description of proposed command options:
 
 - `--template` - jinja template to render the new doc
@@ -67,8 +68,9 @@ filename: 2021-11-17-introducing-dochive
 
 <figure>
   <img src="../img/2021-11-17-digest-help.drawio.svg"/>
-  <figcaption>Figure 3 - Proposed options for `digest`</figcaption>
+    <figcaption>Figure 3 - Proposed options for <code>digest</code></figcaption>
 </figure>
+
 Description of proposed command options:
 
 - `--template` - jinja template to render the digest doc
