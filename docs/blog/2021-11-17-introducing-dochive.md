@@ -1,4 +1,5 @@
 ---
+disqus: ""
 title: Introducing, DocHive!
 description: After reusing the code powering this blog across multiple projects, a definite pattern has come to light. At its core, the [`profile_builder`](https://jbold569.github.io/profile/blog/2021-07-17-automating-docs-as-code.html) module takes a list of key/value pairs as input, populates a documents template, and updates a mkdocs configuration. This can be leveraged across a multitude of projects to drive many use cases. It only makes sense to rip out the code and turn it into a proper piece of software. This is the start of the document archiver, [DocHive](https://github.com/boldware/dochive).
 publish_date: 2021-11-17
