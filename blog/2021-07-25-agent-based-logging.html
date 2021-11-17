@@ -1,0 +1,1988 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Whether you're working in site reliability, business intelligence, or security, one thing rings true. Logs are king. They are a window into your operations, providing insights into access, change, performance, who, what, when, where, and why. However, just as logs can be invaluable they can just as easily be burdensome and costly. Poor log hygiene plagues many organizations. While many business functions benefit from logs, they don't benefit from all logs and the excess translates directly to cost. In this post we'll explore some options for logging instrumentation that aid in filtering, routing, and maintaining the flow of logs at the host level.">
+      
+      
+      
+        <meta name="author" content="Jason Bolden">
+      
+      
+        <link rel="canonical" href="https://jbold569.github.io/profile/blog/2021-07-25-agent-based-logging.html">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
+    
+    
+      
+        <title>Agent Based Logging - Jason Bolden</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.a57b2b03.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../stylesheets/custom.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agent-based-logging" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="Jason Bolden" class="md-header__button md-logo" aria-label="Jason Bolden" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jason Bolden
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Agent Based Logging
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jbold569/profile/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jbold569/profile
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../index.html" class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../about.html" class="md-tabs__link">
+      About
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="readme.html" class="md-tabs__link md-tabs__link--active">
+        Blogs
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Jason Bolden" class="md-nav__button md-logo" aria-label="Jason Bolden" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Jason Bolden
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jbold569/profile/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jbold569/profile
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about.html" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Blogs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Blogs" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Blogs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="readme.html" class="md-nav__link">
+        Content
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          2021
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="2021" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          2021
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2021-11-17-introducing-dochive.html" class="md-nav__link">
+        Introducing, DocHive!
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2021-11-02-hello-github-discussions-goodbye-disqus.html" class="md-nav__link">
+        Hello, GitHub Discussions! Goodbye, Disqus...
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Agent Based Logging
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="2021-07-25-agent-based-logging.html" class="md-nav__link md-nav__link--active">
+        Agent Based Logging
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objective" class="md-nav__link">
+    Objective
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-breakdown" class="md-nav__link">
+    The Breakdown
+  </a>
+  
+    <nav class="md-nav" aria-label="The Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fluentbit" class="md-nav__link">
+    Fluentbit
+  </a>
+  
+    <nav class="md-nav" aria-label="Fluentbit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#30-minute-sprint" class="md-nav__link">
+    30 Minute Sprint
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-setup" class="md-nav__link">
+    Local Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud-setup" class="md-nav__link">
+    Cloud Setup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nxlog" class="md-nav__link">
+    NXLog
+  </a>
+  
+    <nav class="md-nav" aria-label="NXLog">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#30-minute-sprint_1" class="md-nav__link">
+    30 Minute Sprint
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-setup_1" class="md-nav__link">
+    Local Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud-setup_1" class="md-nav__link">
+    Cloud Setup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minifi" class="md-nav__link">
+    MiNiFi
+  </a>
+  
+    <nav class="md-nav" aria-label="MiNiFi">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#30-minute-sprint_2" class="md-nav__link">
+    30 Minute Sprint
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-setup_2" class="md-nav__link">
+    Local Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud-setup_2" class="md-nav__link">
+    Cloud Setup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2021-07-17-automating-docs-as-code.html" class="md-nav__link">
+        Automating Docs as Code
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objective" class="md-nav__link">
+    Objective
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-breakdown" class="md-nav__link">
+    The Breakdown
+  </a>
+  
+    <nav class="md-nav" aria-label="The Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fluentbit" class="md-nav__link">
+    Fluentbit
+  </a>
+  
+    <nav class="md-nav" aria-label="Fluentbit">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#30-minute-sprint" class="md-nav__link">
+    30 Minute Sprint
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-setup" class="md-nav__link">
+    Local Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud-setup" class="md-nav__link">
+    Cloud Setup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nxlog" class="md-nav__link">
+    NXLog
+  </a>
+  
+    <nav class="md-nav" aria-label="NXLog">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#30-minute-sprint_1" class="md-nav__link">
+    30 Minute Sprint
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-setup_1" class="md-nav__link">
+    Local Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud-setup_1" class="md-nav__link">
+    Cloud Setup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minifi" class="md-nav__link">
+    MiNiFi
+  </a>
+  
+    <nav class="md-nav" aria-label="MiNiFi">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#30-minute-sprint_2" class="md-nav__link">
+    30 Minute Sprint
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-setup_2" class="md-nav__link">
+    Local Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud-setup_2" class="md-nav__link">
+    Cloud Setup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jbold569/profile/edit/main/docs/blog/2021-07-25-agent-based-logging.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <div id="banner" class="page-image">
+    <img src="../img/2021-07-25-blog-banner.drawio.svg" alt="buscar log mysql xampp">
+    <div class="page-image-caption">
+        <p>
+            <a href="https://flic.kr/p/tLtDWR">El Taller del Bit</a>
+        </p>
+    </div>
+</div>
+
+<!-- Reposition the banner image on top -->
+<script>
+    var article = document.getElementsByTagName("article")[0];
+    article.insertBefore(document.getElementById("banner"), article.childNodes[0]);
+</script>
+
+<h1 id="agent-based-logging">Agent Based Logging</h1>
+<p><em>Posted by <a href="../about.html">Jason Bolden</a> on Jul 25, 2021</em></p>
+<p>Whether you're working in site reliability, business intelligence, or security, one thing rings true. Logs are king. They are a window into your operations, providing insights into access, change, performance, who, what, when, where, and why. However, just as logs can be invaluable they can just as easily be burdensome and costly. Poor log hygiene plagues many organizations. While many business functions benefit from logs, they don't benefit from all logs and the excess translates directly to cost. In this post we'll explore some options for logging instrumentation that aid in filtering, routing, and maintaining the flow of logs at the host level.</p>
+<h2 id="objective">Objective</h2>
+<p>In this post we'll explore 3 popular logging agents to better understand the pros and cons of each solution for different scenarios. The contenders are:</p>
+<p><img alt="Fluentbit" src="../img/2021-07-25-fluentbit-logo.drawio.svg" /> </p>
+<p>Created in 2011, Fluentd is one of the most popular logging agents in the cloud computing space. The project was open-sourced in the same year, and Google supports their own flavor as their standard cloud logging agent. In 2014, Fluentbit was created as a lighter weight agent for <abbr title="Internet of Things">IoT</abbr> workloads.</p>
+<p><img alt="NXLog" src="../img/2021-07-25-nxlog-logo.drawio.svg" /> </p>
+<p>NXLog was created back in 2009 as an alternative to msyslog. Originally a closed source project, NXLog Community Edition was open-sourced in 2011 and has been free since. NXLog has a reputation in the cybersecurity space as a windows event log collector. SANS' <a href="https://www.sans.org/cyber-security-courses/siem-with-tactical-analytics/">SEC555</a> course references NXLog as a reliable free option for gaining visibility into windows and system logging.</p>
+<p><img alt="MiNiFi" src="../img/2021-07-25-minifi-logo.drawio.svg" /> </p>
+<p>Apache NiFi began as a project created by the NSA. It was later introduced to the Apache Software Foundation, and subsequently commercialized by Hortonworks (now <a href="https://www.cloudera.com/">Cloudera</a>). The tool is a robust Data Flow Controller with the goal of making the automation and management of <abbr title="Extract, Transform, Load">ETL</abbr> processes simpler and more maintainable. MiNiFi is a sub-project that borrows the fundamental concepts defined by NiFi, but packages them in a smaller form factor for deployment to endpoints and <abbr title="Internet of Things">IoT</abbr> devices.</p>
+<p>We'll run through a basic deployment to a Windows desktop to demonstrate local setup and Kubernetes for cloud. In my personal experience, I've leveraged NiFi quite extensively. To be as objective as possibly in our evaluation, we'll measure each tool according to the following criteria:</p>
+<ul>
+<li><code>Documentation</code> - This will be judged on completeness, number of examples, and searchability</li>
+<li><code>Ease of Use</code> - How short is the time to get up and running, does the agent support monitoring, is it easy to maintain?</li>
+<li><code>Cloud Readiness</code> - What cloud providers are supported? Does the documentation describe cloud installation?</li>
+<li><code>Architecture</code> - How well is the agent designed, how resilient is it to operational disruption, can the base functionality be easily extended?</li>
+</ul>
+<p>For the sake of time, evaluating ease of use and documentation will be based on my ability to set up the agents after 30 minutes of reading the documentation. The following Figures depict our lab setup.</p>
+<figure>
+  <img src="../img/2021-07-25-conceptual1.drawio.svg"/>
+  <figcaption>Figure 1 - Conceptual Local Setup</figcaption>
+</figure>
+
+<figure>
+  <img src="../img/2021-07-25-conceptual2.drawio.svg"/>
+  <figcaption>Figure 2 - Conceptual Cloud Setup</figcaption>
+</figure>
+
+<p>All configurations and scripts for this post can be found in this <a href="https://github.com/jbold569/logging-agent-eval">GitHub repo</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>When investigating multiple tools that solve the same problem, it's always a good idea to use time boxes. While 30 minutes is a bit extreme, it's not uncommon to dedicate a day to hacking out an <abbr title="Minimum Viable Product">MVP</abbr> to assess the feasibility of using one solution over another.</p>
+</div>
+<h2 id="the-breakdown">The Breakdown</h2>
+<p>Logging agents typically follow a 3 part architecture. <code>Source</code>, defines how the agent interfaces with the log producing system. <code>Channel</code>, a transport layer. Data are stored, transformed, and/or filtered in this layer. Lastly, <code>Sink</code> defines the interface with the destination of the data. As we describe the architecture of the three Solutions, we'll tie their components back to these three constructs for consistency and ease of comparison.</p>
+<figure>
+  <img src="../img/2021-07-25-agent-conceptual.drawio.svg"/>
+  <figcaption>Figure 3 - Conceptual 3 part architecture for logging agents</figcaption>
+</figure>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The astute would recognize this terminology from the <a href="https://flume.apache.org/">Apache Flume</a> project. This was the first logging agent I used in a production setting. Many projects have sprung up since, but their underlying architecture remains more or less the same.</p>
+</div>
+<p>We'll also be using this short python script to produce our applications logs in each test.
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">socket</span><span class="o">,</span> <span class="nn">sys</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="si">:</span><span class="s1">%Y-%m-%dT%H:%M:%S</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span><span class="si">}</span><span class="s1"> Hello, World!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+</td></tr></table></p>
+<p>This script is used in both the Local and Cloud setups. The following is the <code>Dockerfile</code> definition for our chatty-app.
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="k">FROM</span> <span class="s">python:3.8-slim-buster</span>
+
+<span class="k">WORKDIR</span><span class="s"> /app</span>
+
+<span class="k">COPY</span> log-gen.py log-gen.py
+
+<span class="k">CMD</span> <span class="p">[</span><span class="s2">&quot;python3&quot;</span><span class="p">,</span> <span class="s2">&quot;log-gen.py&quot;</span><span class="p">,</span> <span class="s2">&quot;/var/log/log-file.log&quot;</span><span class="p">]</span>
+</code></pre></div>
+</td></tr></table></p>
+<p><a href="https://minikube.sigs.k8s.io/docs/start/">Minikube</a> and <a href="https://hub.docker.com/search?q=&amp;type=edition&amp;offering=community&amp;sort=updated_at&amp;order=desc">Docker</a> should be installed on your machine if you intend to follow along. <code>chatty-app</code> must be built with the minikube environment variables set beforehand.
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>minikube start
+<span class="nb">eval</span> <span class="k">$(</span>minikube docker-env<span class="k">)</span>
+<span class="nb">cd</span> logging-agent-eval/cloud
+docker build --tag chatty-app .
+docker images
+</code></pre></div>
+</td></tr></table></p>
+<h3 id="fluentbit">Fluentbit</h3>
+<p>Fluentbit doesn't deviate much from our established formula. Configuration of the agent boasts a simplistic <a href="https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/format-schema">format and schema</a>, utilizing <code>Sections</code> and indented key/value paired <code>Entries</code></p>
+<figure>
+  <img src="../img/2021-07-25-fluentbit-conceptual.drawio.svg" />
+  <figcaption>Figure 4 - Fluentbit Data Pipeline Model</figcaption>
+</figure>
+
+<h4 id="30-minute-sprint">30 Minute Sprint</h4>
+<p>After 30 minutes of combing the documentation, I felt pretty comfortable to start hacking away at an <abbr title="Minimum Viable Product">MVP</abbr>. The docs are organized using <a href="https://www.gitbook.com/">GitBook</a>, making it fairly painless to navigate. If I had to be nit-picky, there's quite a few grammatical errors throughout. It's not unreadable, but it does throw one off a bit.</p>
+<p>Concerning the bells and whistles, <a href="https://docs.fluentbit.io/manual/administration/security">security</a> is supported through the use of TLS. All <code>outputs</code> that require network I/O support options for TLS configuration. Agents are resilient through the use of <a href="https://docs.fluentbit.io/manual/administration/buffering-and-storage">buffering</a>, enabling persistance to disk. Agent health can be <a href="https://docs.fluentbit.io/manual/administration/monitoring">monitored</a> via API calls when configured. Alternatively, one could use the <a href="https://docs.fluentbit.io/manual/pipeline/outputs/prometheus-exporter">Prometheus Exporter</a> output plugin to route monitoring metrics directly to a prometheus server.  <a href="https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/configuration-file">configuration</a>.</p>
+<p>Fluentbit also has a handy <a href="https://cloud.calyptia.com/#/visualizer">visualizer</a> to aid in flow development. This can be very useful when troubleshooting complex dataflows.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Take care with buffering strategies on cloud workloads. Due to the ephemeral nature of container resources, one should ensure the Fluentbit storage paths point to persistent volumes in your <abbr title="Kubernetes">K8S</abbr> deployment.   </p>
+</div>
+<h4 id="local-setup">Local Setup</h4>
+<p>After downloading the <a href="https://docs.fluentbit.io/manual/installation/windows#installing-from-zip-archive">ZIP archive</a> for windows, create two new <code>*.conf</code> files to save the following settings:</p>
+<ul>
+<li><code>fluent-bit.conf</code> defines our data flow. 
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>[SERVICE]
+    flush        5
+    daemon       Off
+    log_level    info
+    parsers_file parsers.conf
+
+[INPUT]
+    name tail
+    tag  log_file
+    path ../log-file.log
+    parser custom
+
+[INPUT]
+    name winlog
+    tag win_log
+    channels Security
+    Interval_Sec 1
+    db winlog.sqlite 
+
+[OUTPUT]
+    name  tcp
+    match *
+    host 127.0.0.1
+    port 8514
+    format json_lines
+</code></pre></div>
+</td></tr></table></li>
+<li><code>parsers.conf</code> holds our parsing definitions. In our case, we only define one parser to handle logs from the <code>log-gen.py</code> script.
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>[PARSER]
+    Name   custom
+    Format regex
+    Regex  ^(?&lt;time&gt;[^ ]*) (?&lt;host&gt;[^ ]*) (?&lt;message&gt;.*)?$
+    Time_Key time
+    Time_Format %Y-%m-%dT%H:%M:%S
+</code></pre></div>
+</td></tr></table></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Ensure that the <code>tail</code> INPUT path parameter matches the path used by the <code>log-gen.py</code> script.</p>
+</div>
+<p>With our config files in hand, we can run the following commands to start our test.</p>
+<ol>
+<li>Run the logger script.
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="err">❯</span> <span class="n">python</span> <span class="n">log-gen</span><span class="p">.</span><span class="n">py</span> <span class="n">log</span><span class="o">-file</span><span class="p">.</span><span class="n">log</span>
+</code></pre></div>
+</td></tr></table></li>
+<li>In another terminal, with administrative privileges.
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="err">❯</span> <span class="nb">cd </span><span class="n">td-agent-bit</span><span class="p">-*</span>
+<span class="err">❯</span> <span class="p">./</span><span class="n">bin</span><span class="p">/</span><span class="n">fluent-bit</span><span class="p">.</span><span class="n">exe</span> <span class="n">-c</span> <span class="p">./</span><span class="n">conf</span><span class="p">/</span><span class="n">fluent-bit</span><span class="p">.</span><span class="n">conf</span>
+</code></pre></div>
+</td></tr></table></li>
+<li>Lastly, on the receiving end, we'll start our TCP listener.
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c1"># From WSL</span>
+❯ nc -l <span class="m">127</span>.0.0.1 <span class="m">8514</span>
+<span class="o">{</span><span class="s2">&quot;date&quot;</span>:1627405959.0,<span class="s2">&quot;host&quot;</span>:<span class="s2">&quot;BoldDesktop&quot;</span>,<span class="s2">&quot;message&quot;</span>:<span class="s2">&quot;Hello, World!&quot;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&quot;date&quot;</span>:1627405961.0,<span class="s2">&quot;host&quot;</span>:<span class="s2">&quot;BoldDesktop&quot;</span>,<span class="s2">&quot;message&quot;</span>:<span class="s2">&quot;Hello, World!&quot;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&quot;date&quot;</span>:1627405963.0,<span class="s2">&quot;host&quot;</span>:<span class="s2">&quot;BoldDesktop&quot;</span>,<span class="s2">&quot;message&quot;</span>:<span class="s2">&quot;Hello, World!&quot;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&quot;date&quot;</span>:1627405965.0,<span class="s2">&quot;host&quot;</span>:<span class="s2">&quot;BoldDesktop&quot;</span>,<span class="s2">&quot;message&quot;</span>:<span class="s2">&quot;Hello, World!&quot;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&quot;date&quot;</span>:1627405967.0,<span class="s2">&quot;host&quot;</span>:<span class="s2">&quot;BoldDesktop&quot;</span>,<span class="s2">&quot;message&quot;</span>:<span class="s2">&quot;Hello, World!&quot;</span><span class="o">}</span>
+</code></pre></div>
+</td></tr></table></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>I've left out the windows event logs from the samples above to minimize sharing of sensitive information.</p>
+</div>
+<h4 id="cloud-setup">Cloud Setup</h4>
+<p>More time was spent configuring the chatty-app container and troubleshooting minikube than actually configuring the fluent-bit container. </p>
+<p>The config files for this setup are listed below:</p>
+<ul>
+<li><code>fluent-bit.conf</code>
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>[SERVICE]
+    flush        5
+    daemon       Off
+    log_level    info
+    parsers_file parsers.conf
+
+[INPUT]
+    name tail
+    tag  log_file
+    path /var/log/log-file.log
+    parser custom
+
+[OUTPUT]
+    name  stdout
+    match *
+</code></pre></div>
+</td></tr></table></li>
+<li><code>parser.conf</code> is the same as before.</li>
+<li><code>cloud-logging-fluentbit.yml</code> is our pod configuration for <abbr title="Kubernetes">K8S</abbr>
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Pod</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test-pod</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="nt">containers</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">chatty-app</span>
+    <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">chatty-app</span>
+    <span class="l l-Scalar l-Scalar-Plain">imagePullPolicy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Never</span>      
+    <span class="l l-Scalar l-Scalar-Plain">volumeMounts</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">varlog</span>
+    <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/log</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fluent-bit</span>
+    <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">fluent/fluent-bit</span>
+    <span class="l l-Scalar l-Scalar-Plain">volumeMounts</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">varlog</span>
+    <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/log</span>
+<span class="hll">    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">config</span>
+</span><span class="hll">    <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/fluent-bit/etc</span>
+</span><span class="nt">volumes</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">varlog</span>
+    <span class="l l-Scalar l-Scalar-Plain">emptyDir</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{}</span>
+<span class="hll"><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">config</span>
+</span><span class="hll">    <span class="l l-Scalar l-Scalar-Plain">configMap</span><span class="p p-Indicator">:</span>
+</span><span class="hll">  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fluentbit-configmap</span>
+</span></code></pre></div>
+</td></tr></table></li>
+</ul>
+<p>The fluentbit container config mounts our user defined configmap to the expected directory. To deploy run the following.
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>❯ kubectl create configmap fluentbit-configmap --from-file<span class="o">=</span>fluent-bit.conf --from-file<span class="o">=</span>parsers.conf
+❯ kubectl apply -f ./cloud-logging-fluentbit.yml
+❯ minikube dashboard <span class="p">&amp;</span>
+</code></pre></div>
+</td></tr></table>
+Navigate to the provisioned <code>pod</code> and view the logs of the fluent-bit container.</p>
+<figure>
+  <img src="../img/2021-07-25-cloud-logs-fluentbit.drawio.svg"/>
+  <figcaption>Figure 5 - Log output from the fluent-bit container in the K8S UI</figcaption>
+</figure>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Fluentd and Kubernetes both document using Fluentbit agents in a daemonset configuration rather than a sidecar. For consistency in our testing we will not follow that recommendation; however, the <a href="https://kubernetes.io/docs/concepts/cluster-administration/logging/#sidecar-container-with-a-logging-agent">sidecar configuration</a> is still a recommended logging pattern documented by Kubernetes.</p>
+</div>
+<h3 id="nxlog">NXLog</h3>
+<p>NXLog may appear simple <a href="https://nxlog.co/documentation/nxlog-user-guide/modules-routes.html">conceptually</a>; however, each component is very extensible.</p>
+<figure>
+  <img src="../img/2021-07-25-nxlog-conceptual.drawio.svg"/>
+  <figcaption>Figure 6 - NXLog Conceptual Architecture</figcaption>
+</figure>
+
+<h4 id="30-minute-sprint_1">30 Minute Sprint</h4>
+<p>NXLog is definitely a very mature project. The documentation is dense and thorough. When I stumbled on their <a href="https://nxlog.co/documentation/nxlog-user-guide/nxlog-language.html">expression language</a> page, I knew I was headed into power user territory. NXLog <code>Routes</code> process <a href="https://nxlog.co/documentation/nxlog-user-guide/events-fields.html"><code>event records</code></a>, collections of <code>fields</code>. The configuration file is made up of 2 main constructs, <code>Directives</code> and <code>Modules</code>. There are 4 types of <code>Modules</code>. <code>Inputs</code> consume event records from source systems and optionally parse incoming records. <code>Processors</code> provide functionality for transforming, buffering, and/or filtering event records. <code>Outputs</code> emit event records to a destination system. Lastly, <code>Extensions</code> provide extended functionality to the NXLog language. <code>Directives</code> are parameters that define the various components of the NXLog configuration.</p>
+<p>Several examples of <a href="https://nxlog.co/documentation/nxlog-user-guide/using-buffers.html">buffering strategies</a> are documented. Monitoring functionality is <a href="https://nxlog.co/documentation/nxlog-user-guide/monitoring.html">lackluster</a>. Documentation only mentions OS specific methods for ensuring NXLog runs as a service; however, collection of health metrics is not mentioned. There are several useful features that are only available in the enterprise version of the agent. Their <a href="https://nxlog.co/documentation/nxlog-user-guide/about-nxlog.html#feature_comparison">feature comparison</a> section goes into more depth. In all, solid knowledge base backing the project. Almost overwhelming, but not so much so that we can't get an <abbr title="Minimum Viable Product">MVP</abbr> running quickly. Security is supported via Input and Output modules that handle SSL/TLS configurations.</p>
+<h4 id="local-setup_1">Local Setup</h4>
+<p>After downloading the <a href="https://nxlog.co/products/nxlog-community-edition/download">installer</a> and completing <a href="https://nxlog.co/documentation/nxlog-user-guide/deployment.html">installation</a>, create one new <code>*.conf</code> files to save the following settings:</p>
+<ul>
+<li><code>nxlog.conf</code> defines our data flow. 
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>&lt;Extension _json&gt;
+    Module  xm_json
+&lt;/Extension&gt;
+
+&lt;Input winlog&gt;
+    Module  im_wseventing
+    Exec to_json();    
+    &lt;QueryXML&gt;
+        &lt;QueryList&gt;
+            &lt;Query Id=&quot;0&quot; Path=&quot;Application&quot;&gt;
+                &lt;Select Path=&quot;System&quot;&gt;*&lt;/Select&gt;                    
+            &lt;/Query&gt;
+        &lt;/QueryList&gt;
+    &lt;/QueryXML&gt;
+&lt;/Input&gt;
+
+define EVENT_REGEX /(?x)^(\d+-\d+-\d+T\d+:\d+:\d+)\s+(\S+)\s+(.*)/
+&lt;Input file&gt;
+    Module  im_file
+    File    &quot;C:\\logs\\log-file.log&quot;
+    &lt;Exec&gt;
+        if $raw_event =~ %EVENT_REGEX%
+        {
+            $EventTime = strptime($1,&#39;%Y-%m-%dT%T&#39;);
+            $Host = $2;
+            $Message = $3;
+            to_json();
+        }
+        else drop();
+    &lt;/Exec&gt;
+&lt;/Input&gt;
+
+&lt;Output tcp&gt;
+    Module  om_tcp
+    Host    127.0.0.1
+    Port    8514
+&lt;/Output&gt;
+
+&lt;Route winlog_to_tcp&gt;
+    Path    winlog =&gt; tcp
+&lt;/Route&gt;
+
+&lt;Route file_to_tcp&gt;
+    Path    file =&gt; tcp
+&lt;/Route&gt;
+</code></pre></div>
+</td></tr></table></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Ensure that the <code>File</code> directive matches the path used by the <code>log-gen.py</code> script.</p>
+</div>
+<p>Testing procedures are as follows.</p>
+<ol>
+<li>Run the logger script.
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="err">❯</span> <span class="n">python</span> <span class="n">log-gen</span><span class="p">.</span><span class="n">py</span> <span class="n">log</span><span class="o">-file</span><span class="p">.</span><span class="n">log</span>
+</code></pre></div>
+</td></tr></table></li>
+<li>In another terminal, with administrative privileges. 
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="err">❯</span> <span class="nb">cd </span><span class="nv">$NXLOG_PATH</span>
+<span class="err">❯</span> <span class="p">./</span><span class="n">nxlog</span><span class="p">.</span><span class="n">exe</span> <span class="n">-c</span> <span class="p">./</span><span class="n">nxlog</span><span class="p">.</span><span class="n">conf</span>
+</code></pre></div>
+</td></tr></table></li>
+<li>Lastly, on the receiving end, we'll start our TCP listener.
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c1"># From WSL</span>
+❯ nc -l <span class="m">127</span>.0.0.1 <span class="m">8514</span>
+<span class="o">{</span><span class="s2">&quot;EventReceivedTime&quot;</span>:<span class="s2">&quot;2021-07-27 22:34:56&quot;</span>,<span class="s2">&quot;SourceModuleName&quot;</span>:<span class="s2">&quot;file&quot;</span>,<span class="s2">&quot;SourceModuleType&quot;</span>:<span class="s2">&quot;im_file&quot;</span>,<span class="s2">&quot;EventTime&quot;</span>:<span class="s2">&quot;2021-07-27 22:34:56&quot;</span>,<span class="s2">&quot;Host&quot;</span>:<span class="s2">&quot;BoldDesktop&quot;</span>,<span class="s2">&quot;Message&quot;</span>:<span class="s2">&quot;Hello, World!&quot;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&quot;EventReceivedTime&quot;</span>:<span class="s2">&quot;2021-07-27 22:34:58&quot;</span>,<span class="s2">&quot;SourceModuleName&quot;</span>:<span class="s2">&quot;file&quot;</span>,<span class="s2">&quot;SourceModuleType&quot;</span>:<span class="s2">&quot;im_file&quot;</span>,<span class="s2">&quot;EventTime&quot;</span>:<span class="s2">&quot;2021-07-27 22:34:58&quot;</span>,<span class="s2">&quot;Host&quot;</span>:<span class="s2">&quot;BoldDesktop&quot;</span>,<span class="s2">&quot;Message&quot;</span>:<span class="s2">&quot;Hello, World!&quot;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&quot;EventReceivedTime&quot;</span>:<span class="s2">&quot;2021-07-27 22:35:00&quot;</span>,<span class="s2">&quot;SourceModuleName&quot;</span>:<span class="s2">&quot;file&quot;</span>,<span class="s2">&quot;SourceModuleType&quot;</span>:<span class="s2">&quot;im_file&quot;</span>,<span class="s2">&quot;EventTime&quot;</span>:<span class="s2">&quot;2021-07-27 22:35:00&quot;</span>,<span class="s2">&quot;Host&quot;</span>:<span class="s2">&quot;BoldDesktop&quot;</span>,<span class="s2">&quot;Message&quot;</span>:<span class="s2">&quot;Hello, World!&quot;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&quot;EventReceivedTime&quot;</span>:<span class="s2">&quot;2021-07-27 22:35:02&quot;</span>,<span class="s2">&quot;SourceModuleName&quot;</span>:<span class="s2">&quot;file&quot;</span>,<span class="s2">&quot;SourceModuleType&quot;</span>:<span class="s2">&quot;im_file&quot;</span>,<span class="s2">&quot;EventTime&quot;</span>:<span class="s2">&quot;2021-07-27 22:35:02&quot;</span>,<span class="s2">&quot;Host&quot;</span>:<span class="s2">&quot;BoldDesktop&quot;</span>,<span class="s2">&quot;Message&quot;</span>:<span class="s2">&quot;Hello, World!&quot;</span><span class="o">}</span>
+</code></pre></div>
+</td></tr></table></li>
+</ol>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>NXLog for Windows is an <code>.msi</code> installation. For my setup, I added the path to the <code>nxlog.exe</code> to my system path for ease of use. <code>$NXLOG_PATH</code> is not defined by default.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Again, I've left out the windows event logs from the samples above to minimize sharing of sensitive information.</p>
+</div>
+<h4 id="cloud-setup_1">Cloud Setup</h4>
+<p>The <abbr title="Kubernetes">K8S</abbr> config for NXLog is a bit different than for Fluentbit. Instead of writing the logs to <code>stdout</code>, we've configured NXLog to write them to the agent's internal log file. NXLog does not support writing to <code>stdout</code>.</p>
+<p>NXLog documentation provides instructions to <a href="https://nxlog.co/documentation/nxlog-user-guide/deploy_docker.html">build the docker</a> image for the agent locally; however, it can be pull remotely from DockerHub.</p>
+<p>The config files for this setup are listed below:</p>
+<ul>
+<li><code>nxlog.conf</code> - Logs are output to the <code>om_null</code> module, and we use the <code>log_info()</code> function to capture them instead
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>User nxlog
+Group nxlog
+
+<span class="hll">LogFile /var/log/nxlog.log
+</span><span class="hll">LogLevel INFO
+</span>
+&lt;Extension _json&gt;
+    Module  xm_json
+&lt;/Extension&gt;
+
+define EVENT_REGEX /(?x)^(\d+-\d+-\d+T\d+:\d+:\d+)\s+(\S+)\s+(.*)/
+
+&lt;Input file&gt;
+    Module  im_file
+    File    &quot;/var/log/log-file.log&quot;
+    &lt;Exec&gt;
+        if $raw_event =~ %EVENT_REGEX%
+        {
+            $EventTime = strptime($1,&#39;%Y-%m-%dT%T&#39;);
+            $Host = $2;
+            $Message = $3;
+<span class="hll">            log_info(to_json());
+</span>        }
+        else drop();
+    &lt;/Exec&gt;
+&lt;/Input&gt;
+
+&lt;Output null&gt;
+    Module  om_null
+&lt;/Output&gt;
+
+&lt;Route file_to_tcp&gt;
+    Path    file =&gt; null
+&lt;/Route&gt;
+</code></pre></div>
+</td></tr></table></li>
+<li><code>cloud-logging-nxlog.yml</code> is our pod configuration for <abbr title="Kubernetes">K8S</abbr>
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Pod</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">test-pod</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="nt">containers</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">chatty-app</span>
+    <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">chatty-app</span>
+    <span class="l l-Scalar l-Scalar-Plain">imagePullPolicy</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Never</span>      
+    <span class="l l-Scalar l-Scalar-Plain">volumeMounts</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">varlog</span>
+    <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/log</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nxlog-ce</span>
+    <span class="l l-Scalar l-Scalar-Plain">image</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">nxlog/nxlog-ce</span>
+    <span class="l l-Scalar l-Scalar-Plain">args</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;-c&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;/etc/nxlog/nxlog.conf&quot;</span><span class="p p-Indicator">]</span>
+<span class="hll">    <span class="nt">volumeMounts</span><span class="p">:</span>
+</span>    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">varlog</span>
+    <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/log</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">config</span>
+    <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/nxlog</span>
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">varlog</span>
+    <span class="l l-Scalar l-Scalar-Plain">emptyDir</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{}</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">config</span>
+    <span class="l l-Scalar l-Scalar-Plain">configMap</span><span class="p p-Indicator">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nxlog-configmap</span>
+</code></pre></div>
+</td></tr></table></li>
+</ul>
+<p>Like before, the NXLog container config mounts our user defined configmap to the expected directory. In this case, the path to the config is passed as a container argument. To deploy run the following.
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>❯ kubectl create configmap nxlog-configmap --from-file<span class="o">=</span>nxlog.conf
+❯ kubectl apply -f ./cloud-logging-nxlog.yml
+❯ minikube dashboard <span class="p">&amp;</span>
+</code></pre></div>
+</td></tr></table>
+Navigate to the provisioned <code>pod</code> and start the terminal for the nxlog-ce container. Execute <code>tail -f /var/log/nxlog.log</code> to see the agent logs.</p>
+<figure>
+  <img src="../img/2021-07-25-cloud-logs-nxlog.drawio.svg"/>
+  <figcaption>Figure 7 - Log output from the nxlog-ce container in the K8S UI</figcaption>
+</figure>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>NXLog <a href="https://nxlog.co/documentation/nxlog-user-guide/kubernetes.html">documents</a> both Daemonset and Sidecar configurations for logging. </p>
+</div>
+<h3 id="minifi">MiNiFi</h3>
+<p>Coined the Swiss Army Knife of Dataflows, there's almost nothing you can't do with Apache NiFi. Eat your heart out on the <a href="https://nifi.apache.org/docs.html">documentation</a>. </p>
+<figure>
+  <img src="../img/2021-07-25-minifi-conceptual.drawio.svg"/>
+  <figcaption>Figure 8 - MiNiFi conceptual architecture</figcaption>
+</figure>
+
+<h4 id="30-minute-sprint_2">30 Minute Sprint</h4>
+<p>NiFi/MiNiFi uses <code>Processors</code> to create, transform, and transmit <code>Flowfiles</code>. That's pretty much it. Full disclosure, I have many years of experience working with NiFi. I've deployed and maintained NiFi clusters in multiple data centers, developed configurations for MiNiFi in the cloud, and deployed agents to thousands of self service machines. I'm no stranger to the tool, so the 30 minutes time cap doesn't really apply here.</p>
+<p>That said, my experience with this tool did not help me as much as it should have for our two test cases. For the sake of time and, frankly, to limit the scope of this post, I had to cut the testing of the MiNiFi agent short as I was going way too far in the weeds trying to get the configuration working. While NiFi and MiNiFi sport <a href="https://nifi.apache.org/docs/nifi-docs/html/overview.html#high-level-overview-of-key-nifi-features">all the features</a> you'd want in an enterprise setting (<a href="https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#security_configuration">security</a>, <a href="https://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#clustering">resiliency</a>, <a href="https://nifi.apache.org/docs/nifi-docs/html/user-guide.html#Reporting_Tasks">monitoring</a>, flexibility, extensibility, etc.), the tool is massive and requires a lot of overhead to utilize effectively.</p>
+<p>Not to add insult to injury, but MiNiFi has two version, C++ and Java. The Java agent, for all intensive purposes, is a headless version of NiFi with fewer core packages included. It's still a hefty agent, but you have 100% feature parity with the server version. The C++ agent is much lighter, however not all functionality is supported.</p>
+<h4 id="local-setup_2">Local Setup</h4>
+<p>MiNiFi agents are configured using as single <code>yaml</code>; however, it is not recommended that one writes a configuration from a text editor (you'll soon see why). The <a href="https://nifi.apache.org/minifi/minifi-java-agent-quick-start.html">Quickstart</a> walks through how to create a dataflow from the NiFi UI, save it as a template, export, and convert to the <code>.yml</code> config accepted by MiNiFi.</p>
+<figure>
+  <img src="../img/2021-07-25-minifi-flow.drawio.svg"/>
+  <figcaption>Figure 9 - NiFi UI depicting local dataflow setup</figcaption>
+</figure>
+
+<p>After conversion, the flow above becomes...</p>
+<details class="warning"><summary><code>conf.yml</code></summary><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  1</span>
+<span class="normal">  2</span>
+<span class="normal">  3</span>
+<span class="normal">  4</span>
+<span class="normal">  5</span>
+<span class="normal">  6</span>
+<span class="normal">  7</span>
+<span class="normal">  8</span>
+<span class="normal">  9</span>
+<span class="normal"> 10</span>
+<span class="normal"> 11</span>
+<span class="normal"> 12</span>
+<span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">MiNiFi Config Version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="nt">Flow Controller</span><span class="p">:</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local-setup</span>
+<span class="nt">comment</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">Core Properties</span><span class="p">:</span>
+<span class="nt">flow controller graceful shutdown period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10 sec</span>
+<span class="nt">flow service write delay interval</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">500 ms</span>
+<span class="nt">administrative yield duration</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">30 sec</span>
+<span class="nt">bored yield duration</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10 millis</span>
+<span class="nt">max concurrent threads</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">variable registry properties</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">FlowFile Repository</span><span class="p">:</span>
+<span class="nt">partitions</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">256</span>
+<span class="nt">checkpoint interval</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2 mins</span>
+<span class="nt">always sync</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">Swap</span><span class="p">:</span>
+    <span class="nt">threshold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">20000</span>
+    <span class="nt">in period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5 sec</span>
+    <span class="nt">in threads</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="nt">out period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5 sec</span>
+    <span class="nt">out threads</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="nt">Content Repository</span><span class="p">:</span>
+<span class="nt">implementation</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">org.apache.nifi.controller.repository.FileSystemRepository</span>
+<span class="nt">content claim max appendable size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10 MB</span>
+<span class="nt">content claim max flow files</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="nt">content repository archive enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">content repository archive max retention period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">12 hours</span>
+<span class="nt">content repository archive max usage percentage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">50%</span>
+<span class="nt">always sync</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">Provenance Repository</span><span class="p">:</span>
+<span class="nt">provenance rollover time</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1 min</span>
+<span class="nt">implementation</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">org.apache.nifi.provenance.WriteAheadProvenanceRepository</span>
+<span class="nt">provenance index shard size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">500 MB</span>
+<span class="nt">provenance max storage size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1 GB</span>
+<span class="nt">provenance max storage time</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">24 hours</span>
+<span class="nt">provenance buffer size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10000</span>
+<span class="nt">Component Status Repository</span><span class="p">:</span>
+<span class="nt">buffer size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1440</span>
+<span class="nt">snapshot frequency</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1 min</span>
+<span class="nt">Security Properties</span><span class="p">:</span>
+<span class="nt">keystore</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">keystore type</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">keystore password</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">key password</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">truststore</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">truststore type</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">truststore password</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">ssl protocol</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">Sensitive Props</span><span class="p">:</span>
+    <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gAHRSHkEd0lN7Vy1SW20sgZhsNjyGSWx</span>
+    <span class="nt">algorithm</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PBEWITHMD5AND256BITAES-CBC-OPENSSL</span>
+    <span class="nt">provider</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">BC</span>
+<span class="nt">Processors</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4933996e-f262-3afa-0000-000000000000</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ConsumeWindowsEventLog</span>
+<span class="nt">class</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">org.apache.nifi.processors.windows.event.log.ConsumeWindowsEventLog</span>
+<span class="nt">max concurrent tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">scheduling strategy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TIMER_DRIVEN</span>
+<span class="nt">scheduling period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0 sec</span>
+<span class="nt">penalization period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">30 sec</span>
+<span class="nt">yield period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1 sec</span>
+<span class="nt">run duration nanos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="nt">auto-terminated relationships list</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">Properties</span><span class="p">:</span>
+    <span class="nt">channel</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Application</span>
+    <span class="nt">inactiveDurationToReconnect</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10 mins</span>
+    <span class="nt">maxBuffer</span><span class="p">:</span> <span class="s">&#39;1048576&#39;</span>
+    <span class="nt">maxQueue</span><span class="p">:</span> <span class="s">&#39;1024&#39;</span>
+    <span class="nt">query</span><span class="p">:</span> <span class="p p-Indicator">|-</span>
+    <span class="l l-Scalar l-Scalar-Plain">&lt;QueryList&gt;</span>
+        <span class="l l-Scalar l-Scalar-Plain">&lt;Query Id=&quot;0&quot; Path=&quot;Application&quot;&gt;</span>
+        <span class="l l-Scalar l-Scalar-Plain">&lt;Select Path=&quot;Application&quot;&gt;*&lt;/Select&gt;</span>
+        <span class="l l-Scalar l-Scalar-Plain">&lt;/Query&gt;</span>
+    <span class="l l-Scalar l-Scalar-Plain">&lt;/QueryList&gt;</span>
+<span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ffaea6de-2e7c-3964-0000-000000000000</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PutElasticsearch</span>
+<span class="nt">class</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">org.apache.nifi.processors.elasticsearch.PutElasticsearch</span>
+<span class="nt">max concurrent tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">scheduling strategy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TIMER_DRIVEN</span>
+<span class="nt">scheduling period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0 sec</span>
+<span class="nt">penalization period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">30 sec</span>
+<span class="nt">yield period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1 sec</span>
+<span class="nt">run duration nanos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="nt">auto-terminated relationships list</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">Properties</span><span class="p">:</span>
+    <span class="nt">Batch Size</span><span class="p">:</span> <span class="s">&#39;100&#39;</span>
+    <span class="nt">Character Set</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UTF-8</span>
+    <span class="nt">Cluster Name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+    <span class="nt">ElasticSearch Hosts</span><span class="p">:</span>
+    <span class="nt">ElasticSearch Ping Timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5s</span>
+    <span class="nt">Identifier Attribute</span><span class="p">:</span>
+    <span class="nt">Index</span><span class="p">:</span>
+    <span class="nt">Index Operation</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">index</span>
+    <span class="nt">Password</span><span class="p">:</span>
+    <span class="nt">SSL Context Service</span><span class="p">:</span>
+    <span class="nt">Sampler Interval</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5s</span>
+    <span class="nt">Shield Plugin Filename</span><span class="p">:</span>
+    <span class="nt">Type</span><span class="p">:</span>
+    <span class="nt">Username</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">a6cc363f-e088-3e94-0000-000000000000</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">PutTCP</span>
+<span class="nt">class</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">org.apache.nifi.processors.standard.PutTCP</span>
+<span class="nt">max concurrent tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">scheduling strategy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TIMER_DRIVEN</span>
+<span class="nt">scheduling period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0 sec</span>
+<span class="nt">penalization period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">30 sec</span>
+<span class="nt">yield period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1 sec</span>
+<span class="nt">run duration nanos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="nt">auto-terminated relationships list</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">failure</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">success</span>
+<span class="nt">Properties</span><span class="p">:</span>
+    <span class="nt">Character Set</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UTF-8</span>
+    <span class="nt">Connection Per FlowFile</span><span class="p">:</span> <span class="s">&#39;false&#39;</span>
+    <span class="nt">Hostname</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+    <span class="nt">Idle Connection Expiration</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5 seconds</span>
+    <span class="nt">Max Size of Socket Send Buffer</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1 MB</span>
+    <span class="nt">Outgoing Message Delimiter</span><span class="p">:</span>
+    <span class="nt">Port</span><span class="p">:</span> <span class="s">&#39;8514&#39;</span>
+    <span class="nt">SSL Context Service</span><span class="p">:</span>
+    <span class="nt">Timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10 seconds</span>
+<span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3ece5573-f82e-3f5f-0000-000000000000</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TailFile</span>
+<span class="nt">class</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">org.apache.nifi.processors.standard.TailFile</span>
+<span class="nt">max concurrent tasks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">scheduling strategy</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TIMER_DRIVEN</span>
+<span class="nt">scheduling period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0 sec</span>
+<span class="nt">penalization period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">30 sec</span>
+<span class="nt">yield period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1 sec</span>
+<span class="nt">run duration nanos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="nt">auto-terminated relationships list</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">Properties</span><span class="p">:</span>
+    <span class="nt">File Location</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Local</span>
+    <span class="nt">File to Tail</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">C:\\logs\\log-file.log</span>
+    <span class="nt">Initial Start Position</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Beginning of File</span>
+    <span class="nt">Post-Rollover Tail Period</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0 sec</span>
+    <span class="nt">Rolling Filename Pattern</span><span class="p">:</span>
+    <span class="nt">reread-on-nul</span><span class="p">:</span> <span class="s">&#39;false&#39;</span>
+    <span class="nt">tail-base-directory</span><span class="p">:</span>
+    <span class="nt">tail-mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Single file</span>
+    <span class="nt">tailfile-lookup-frequency</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10 minutes</span>
+    <span class="nt">tailfile-maximum-age</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">24 hours</span>
+    <span class="nt">tailfile-recursive-lookup</span><span class="p">:</span> <span class="s">&#39;false&#39;</span>
+<span class="nt">Controller Services</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">Process Groups</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">Input Ports</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">Output Ports</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">Funnels</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">Connections</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">e7bee299-ce60-3591-0000-000000000000</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ConsumeWindowsEventLog/success/PutTCP</span>
+<span class="nt">source id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4933996e-f262-3afa-0000-000000000000</span>
+<span class="nt">source relationship names</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">success</span>
+<span class="nt">destination id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">a6cc363f-e088-3e94-0000-000000000000</span>
+<span class="nt">max work queue size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10000</span>
+<span class="nt">max work queue data size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1 GB</span>
+<span class="nt">flowfile expiration</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0 sec</span>
+<span class="nt">queue prioritizer class</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">b1d11f20-c37d-365e-0000-000000000000</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TailFile/success/PutTCP</span>
+<span class="nt">source id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3ece5573-f82e-3f5f-0000-000000000000</span>
+<span class="nt">source relationship names</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">success</span>
+<span class="nt">destination id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">a6cc363f-e088-3e94-0000-000000000000</span>
+<span class="nt">max work queue size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10000</span>
+<span class="nt">max work queue data size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1 GB</span>
+<span class="nt">flowfile expiration</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0 sec</span>
+<span class="nt">queue prioritizer class</span><span class="p">:</span> <span class="s">&#39;&#39;</span>
+<span class="nt">Remote Process Groups</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+<span class="nt">NiFi Properties Overrides</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+</code></pre></div>
+</td></tr></table>
+</details>
+<p>Testing procedures are as follows. We're not going into great detail on this one.</p>
+<ol>
+<li>Run the logger script.
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="err">❯</span> <span class="n">python</span> <span class="n">log-gen</span><span class="p">.</span><span class="n">py</span> <span class="n">log</span><span class="o">-file</span><span class="p">.</span><span class="n">log</span>
+</code></pre></div>
+</td></tr></table></li>
+<li>In another terminal, ensure that the <code>config.yml</code> file is in the <code>conf</code> directory for MiNiFi. Start the agent. 
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="err">❯</span> <span class="p">./</span><span class="n">run-minifi</span><span class="p">.</span><span class="n">bat</span>
+</code></pre></div>
+</td></tr></table></li>
+<li>Lastly, on the receiving end, we'll start our TCP listener.
+    <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c1"># From WSL</span>
+❯ nc -l <span class="m">127</span>.0.0.1 <span class="m">8514</span>
+<span class="m">2021</span>-07-28T21:35:05 BoldDesktop Hello, World!
+&lt;Event <span class="nv">xmlns</span><span class="o">=</span><span class="s1">&#39;http://schemas.microsoft.com/win/2004/08/events/event&#39;</span>&gt;&lt;System&gt;&lt;Provider <span class="nv">Name</span><span class="o">=</span><span class="s1">&#39;Microsoft-Windows-Security-SPP&#39;</span> <span class="nv">Guid</span><span class="o">=</span><span class="s1">&#39;{E23B33B0-C8C9-472C-A5F9-F2BDFEA0F156}&#39;</span> <span class="nv">EventSourceName</span><span class="o">=</span><span class="s1">&#39;Software Protection Platform Service&#39;</span>/&gt;&lt;EventID <span class="nv">Qualifiers</span><span class="o">=</span><span class="s1">&#39;49152&#39;</span>&gt;16394&lt;/EventID&gt;&lt;Version&gt;0&lt;/Version&gt;&lt;Level&gt;4&lt;/Level&gt;&lt;Task&gt;0&lt;/Task&gt;&lt;Opcode&gt;0&lt;/Opcode&gt;&lt;Keywords&gt;0x80000000000000&lt;/Keywords&gt;&lt;TimeCreated <span class="nv">SystemTime</span><span class="o">=</span><span class="s1">&#39;2021-07-29T04:37:49.7185935Z&#39;</span>/&gt;&lt;EventRecordID&gt;3230&lt;/EventRecordID&gt;&lt;Correlation/&gt;&lt;Execution <span class="nv">ProcessID</span><span class="o">=</span><span class="s1">&#39;0&#39;</span> <span class="nv">ThreadID</span><span class="o">=</span><span class="s1">&#39;0&#39;</span>/&gt;&lt;Channel&gt;Application&lt;/Channel&gt;&lt;Computer&gt;BoldDesktop&lt;/Computer&gt;&lt;Security/&gt;&lt;/System&gt;&lt;EventData&gt;&lt;/EventData&gt;&lt;/Event&gt;&lt;Event <span class="nv">xmlns</span><span class="o">=</span><span class="s1">&#39;http://schemas.microsoft.com/win/2004/08/events/event&#39;</span>&gt;&lt;System&gt;&lt;Provider <span class="nv">Name</span><span class="o">=</span><span class="s1">&#39;SecurityCenter&#39;</span>/&gt;&lt;EventID <span class="nv">Qualifiers</span><span class="o">=</span><span class="s1">&#39;0&#39;</span>&gt;15&lt;/EventID&gt;&lt;Version&gt;0&lt;/Version&gt;&lt;Level&gt;4&lt;/Level&gt;&lt;Task&gt;0&lt;/Task&gt;&lt;Opcode&gt;0&lt;/Opcode&gt;&lt;Keywords&gt;0x80000000000000&lt;/Keywords&gt;&lt;TimeCreated <span class="nv">SystemTime</span><span class="o">=</span><span class="s1">&#39;2021-07-29T04:38:03.9292335Z&#39;</span>/&gt;&lt;EventRecordID&gt;3231&lt;/EventRecordID&gt;&lt;Correlation/&gt;&lt;Execution <span class="nv">ProcessID</span><span class="o">=</span><span class="s1">&#39;0&#39;</span> <span class="nv">ThreadID</span><span class="o">=</span><span class="s1">&#39;0&#39;</span>/&gt;&lt;Channel&gt;Application&lt;/Channel&gt;&lt;Computer&gt;BoldDesktop&lt;/Computer&gt;&lt;Security/&gt;&lt;/System&gt;&lt;EventData&gt;&lt;Data&gt;Windows Defender&lt;/Data&gt;&lt;Data&gt;SECURITY_PRODUCT_STATE_ON&lt;/Data&gt;&lt;/EventData&gt;&lt;/Event&gt;&lt;Event <span class="nv">xmlns</span><span class="o">=</span><span class="s1">&#39;http://schemas.microsoft.com/win/2004/08/events/event&#39;</span>&gt;&lt;System&gt;&lt;Provider <span class="nv">Name</span><span class="o">=</span><span class="s1">&#39;Microsoft-Windows-Security-SPP&#39;</span> <span class="nv">Guid</span><span class="o">=</span><span class="s1">&#39;{E23B33B0-C8C9-472C-A5F9-F2BDFEA0F156}&#39;</span> <span class="nv">EventSourceName</span><span class="o">=</span><span class="s1">&#39;Software Protection Platform Service&#39;</span>/&gt;&lt;EventID <span class="nv">Qualifiers</span><span class="o">=</span><span class="s1">&#39;16384&#39;</span>&gt;16384&lt;/EventID&gt;&lt;Version&gt;0&lt;/Version&gt;&lt;Level&gt;4&lt;/Level&gt;&lt;Task&gt;0&lt;/Task&gt;&lt;Opcode&gt;0&lt;/Opcode&gt;&lt;Keywords&gt;0x80000000000000&lt;/Keywords&gt;&lt;TimeCreated <span class="nv">SystemTime</span><span class="o">=</span><span class="s1">&#39;2021-07-29T04:38:23.8359934Z&#39;</span>/&gt;&lt;EventRecordID&gt;3232&lt;/EventRecordID&gt;&lt;Correlation/&gt;&lt;Execution <span class="nv">ProcessID</span><span class="o">=</span><span class="s1">&#39;0&#39;</span> <span class="nv">ThreadID</span><span class="o">=</span><span class="s1">&#39;0&#39;</span>/&gt;&lt;Channel&gt;Application&lt;/Channel&gt;&lt;Computer&gt;BoldDesktop&lt;/Computer&gt;&lt;Security/&gt;&lt;/System&gt;&lt;EventData&gt;&lt;Data&gt;2121-07-05T04:38:23Z&lt;/Data&gt;&lt;Data&gt;RulesEngine&lt;/Data&gt;&lt;/EventData&gt;&lt;/Event&gt;2021-07-28T21:35:07 BoldDesktop Hello, World!
+<span class="m">2021</span>-07-28T21:35:09 BoldDesktop Hello, World!
+<span class="m">2021</span>-07-28T21:35:11 BoldDesktop Hello, World!
+</code></pre></div>
+</td></tr></table></li>
+</ol>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The steps to convert the NiFi <code>.xml</code> template to the <code>.yml</code> config file have been omitted.</p>
+</div>
+<h4 id="cloud-setup_2">Cloud Setup</h4>
+<p>Leaving this as an exercise for the brave. While I've done this in the past, revisiting the subject has made me realize the tool is not suited for these quick evaluation scenarios.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This evaluation took longer than expected. Though all three tools are great products, each has their own unique advantages and disadvantages in comparison.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th align="center">Documentation</th>
+<th align="center">Ease of Use</th>
+<th align="center">Cloud Readiness</th>
+<th align="center">Architecture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Fluentbit</code></td>
+<td align="center"><img alt="🥉" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f949.svg" title=":third_place:" /></td>
+<td align="center"><img alt="🥇" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f947.svg" title=":first_place:" /></td>
+<td align="center"><img alt="🥇" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f947.svg" title=":first_place:" /></td>
+<td align="center"><img alt="🥉" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f949.svg" title=":third_place:" /></td>
+</tr>
+<tr>
+<td><code>NXLog</code></td>
+<td align="center"><img alt="🥈" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f948.svg" title=":second_place:" /></td>
+<td align="center"><img alt="🥈" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f948.svg" title=":second_place:" /></td>
+<td align="center"><img alt="🥈" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f948.svg" title=":second_place:" /></td>
+<td align="center"><img alt="🥈" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f948.svg" title=":second_place:" /></td>
+</tr>
+<tr>
+<td><code>MiNiFi</code></td>
+<td align="center"><img alt="🥇" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f947.svg" title=":first_place:" /></td>
+<td align="center"><img alt="🥉" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f949.svg" title=":third_place:" /></td>
+<td align="center"><img alt="🥉" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f949.svg" title=":third_place:" /></td>
+<td align="center"><img alt="🥇" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f947.svg" title=":first_place:" /></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>Fluentbit</code> - Fluentbit is the youngest on the block with lots of momentum. It's built for rapid prototyping and minimal enough to meet a majority of use cases while still being easy to use. Relatively, documentation is less mature than the others but still isn't bad. Architecture is simple, but loses out in comparison to its predecessors. It makes up for this in user friendliness and cloud readiness (Kubernetes includes FluentD in its logging strategy documentation!)</li>
+<li><code>NXLog</code> - Solidly in the middle ground. Old tool with a mature community. The NXLog language gives the user flexibility yet doesn't  require in depth knowledge to use.</li>
+<li><code>MiNiFi</code> - Documentation and Architecture are solid for the NiFi project. I will continue to advocate that this is hands down one of the best tools for dataflow management. However, the overhead of maintaining this platform is not for the startup or tinkerer. Cloudera does provide a <a href="https://docs.cloudera.com/cem/1.2.2/index.html">solution</a> that simplifies the management of agents and deployment of configurations, but it is behind a pay wall. If you're in an enterprise setting and you're keen on a robust dataflow strategy, it may be worth the time investment. Otherwise, stick to one of the other two.</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://docs.fluentbit.io/manual/">Fluentbit Documentation</a></li>
+<li><a href="https://nxlog.co/documentation">NXLog Documentation</a></li>
+<li><a href="https://nifi.apache.org/minifi/getting-started.html">MiNiFi Documentation</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/cluster-administration/logging/">Kubernetes Logging Architecture</a></li>
+<li><a href="https://minikube.sigs.k8s.io/docs/">Minikube</a></li>
+</ul>
+                
+                  
+                
+              
+              
+                
+
+
+  <h2 id="__comments">Comments</h2>
+  <div id="disqus_thread"></div>
+  <script>var script,disqus_config=function(){this.page.url="https://jbold569.github.io/profile/blog/2021-07-25-agent-based-logging.html",this.page.identifier="blog/2021-07-25-agent-based-logging.html"};"undefined"==typeof DISQUS?((script=document.createElement("script")).async=!0,script.src="https://jbold569.disqus.com/embed.js",script.setAttribute("data-timestamp",Date.now()),document.body.appendChild(script)):DISQUS.reset({reload:!0,config:disqus_config})</script>
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="2021-11-02-hello-github-discussions-goodbye-disqus.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Hello, GitHub Discussions! Goodbye, Disqus..." rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Hello, GitHub Discussions! Goodbye, Disqus...
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="2021-07-17-automating-docs-as-code.html" class="md-footer__link md-footer__link--next" aria-label="Next: Automating Docs as Code" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Automating Docs as Code
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+      <a href="https://www.linkedin.com/in/jason-bolden-37b55443/" target="_blank" rel="noopener" title="Jason Bolden on LinkedIn" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.b1047164.min.js"></script>
+      
+    
+  </body>
+</html>

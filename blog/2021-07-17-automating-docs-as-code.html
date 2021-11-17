@@ -1,0 +1,1065 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own. Moving at break-neck speeds to keep up with changing technology while pausing to record the trials and tribulations of the journey takes that much more time away from your Product Owner's tight deadlines. [Docs as Code](https://www.docslikecode.com/articles/change-case-study/) as a methodology is arguably magnitudes more convenient than maintaining a Sharepoint site or Word document, but what if we could make things just a little simpler for the lazy coder?">
+      
+      
+      
+        <meta name="author" content="Jason Bolden">
+      
+      
+        <link rel="canonical" href="https://jbold569.github.io/profile/blog/2021-07-17-automating-docs-as-code.html">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
+    
+    
+      
+        <title>Automating Docs as Code - Jason Bolden</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.a57b2b03.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../stylesheets/custom.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#automating-docs-as-code" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="Jason Bolden" class="md-header__button md-logo" aria-label="Jason Bolden" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jason Bolden
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Automating Docs as Code
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jbold569/profile/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jbold569/profile
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../index.html" class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../about.html" class="md-tabs__link">
+      About
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="readme.html" class="md-tabs__link md-tabs__link--active">
+        Blogs
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Jason Bolden" class="md-nav__button md-logo" aria-label="Jason Bolden" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Jason Bolden
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jbold569/profile/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jbold569/profile
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about.html" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Blogs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Blogs" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Blogs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="readme.html" class="md-nav__link">
+        Content
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          2021
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="2021" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          2021
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2021-11-17-introducing-dochive.html" class="md-nav__link">
+        Introducing, DocHive!
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2021-11-02-hello-github-discussions-goodbye-disqus.html" class="md-nav__link">
+        Hello, GitHub Discussions! Goodbye, Disqus...
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2021-07-25-agent-based-logging.html" class="md-nav__link">
+        Agent Based Logging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Automating Docs as Code
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="2021-07-17-automating-docs-as-code.html" class="md-nav__link md-nav__link--active">
+        Automating Docs as Code
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objective" class="md-nav__link">
+    Objective
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-breakdown" class="md-nav__link">
+    The Breakdown
+  </a>
+  
+    <nav class="md-nav" aria-label="The Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automating-inception" class="md-nav__link">
+    Automating Inception
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automating-boilerplate-code" class="md-nav__link">
+    Automating Boilerplate Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automating-dev-prep" class="md-nav__link">
+    Automating Dev Prep
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objective" class="md-nav__link">
+    Objective
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-breakdown" class="md-nav__link">
+    The Breakdown
+  </a>
+  
+    <nav class="md-nav" aria-label="The Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automating-inception" class="md-nav__link">
+    Automating Inception
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automating-boilerplate-code" class="md-nav__link">
+    Automating Boilerplate Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automating-dev-prep" class="md-nav__link">
+    Automating Dev Prep
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jbold569/profile/edit/main/docs/blog/2021-07-17-automating-docs-as-code.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <div id="banner" class="page-image">
+    <img src="../img/2021-07-17-blog-banner.drawio.svg" alt="Lisa Brewster">
+    <div class="page-image-caption">
+        <p>
+            <a href="https://flic.kr/p/9NdAX1">Flickr Lisa Brewster</a>
+        </p>
+    </div>
+</div>
+
+<!-- Reposition the banner image on top -->
+<script>
+    var article = document.getElementsByTagName("article")[0];
+    article.insertBefore(document.getElementById("banner"), article.childNodes[0]);
+</script>
+
+<h1 id="automating-docs-as-code">Automating Docs as Code</h1>
+<p><em>Posted by <a href="../about.html">Jason Bolden</a> on Jul 17, 2021</em> </p>
+<p>This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own. Moving at break-neck speeds to keep up with changing technology while pausing to record the trials and tribulations of the journey takes that much more time away from your Product Owner's tight deadlines. <a href="https://www.docslikecode.com/articles/change-case-study/">Docs as Code</a> as a methodology is arguably magnitudes more convenient than maintaining a Sharepoint site or Word document, but what if we could make things just a little simpler for the lazy coder?</p>
+<h2 id="objective">Objective</h2>
+<p>In this article, we're going to explore a handful of methods to make capturing documentation a little more convenient. As a working example, we'll walk through a python module that generates templated blog posts. Github is used to maintain our documentation and actions are leveraged to orchestrate all of our tedious steps.</p>
+<figure>
+  <img src="../img/2021-07-17-conceptual.drawio.svg" />
+  <figcaption>Figure 1 - Conceptual of our 3 phased approach to automation</figcaption>
+</figure>
+
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>There's a lot of moving pieces in this setup. It's important to note that this write up is focused on the art of the possible and snippets shared are enough for a presentable proof of concept. </p>
+</div>
+<h2 id="the-breakdown">The Breakdown</h2>
+<p>Assuming you have a fresh repo ready to go, let's start at the top.</p>
+<h3 id="automating-inception">Automating Inception</h3>
+<p>We're going to use GitHub's functionality as our starting point when creating a new blog, specifically <a href="https://guides.github.com/features/issues/">Issues</a>. Just as an issue would typically signal the beginning of a new feature for application development, we're going to treat this as the place where we capture the inspiration for our next blog entry.</p>
+<p>Since we're trying to cut out as much manual work as possible, let's take advantage of the template functionality GitHub supports for issues.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>---
+name: Blog Post template
+about: Automation entry point for creation of new blog posts.
+title: &quot;[BLOG]&quot;
+labels: documentation.blog
+assignees: &#39;&#39;
+
+---
+
+title: &lt;TITLE&gt;
+type: &lt;tech, insight, idea&gt;
+summary: &lt;brief summary of post&gt;
+</code></pre></div>
+</td></tr></table>
+<p>Pushing this <code>.md</code> file to your repo under the <code>.github/ISSUE_TEMPLATE</code> directory will result in a pre-filled issue template that presents information we'll need to provide every time we'd like to make a new blog entry. The body is formatted using <code>yaml</code> syntax and the fields will be used as follows:</p>
+<ul>
+<li><code>title</code> - The title of the blog entry.</li>
+<li><code>type</code> - This will be more apparent later, but depending on the type of blog entry, a different template will be used.</li>
+<li><code>summary</code> - This will appear as the first paragraph in the new entry. </li>
+</ul>
+<figure>
+  <img src="../img/2021-07-17-issue-template.drawio.svg" />
+  <figcaption>Figure 2 - Result of our new issue template</figcaption>
+</figure>
+
+<p>Important to note is the label used for this template. This will be used in the workflow that gets triggered next.</p>
+<p>What happens when we create our new issue? Nothing, without a workflow defined. We want this workflow to trigger when a new <code>Issue</code> has been assigned.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Orchestrate Issue triggered workflows based on labels</span>
+<span class="hll"><span class="nt">on</span><span class="p">:</span>
+</span><span class="hll">  <span class="nt">issues</span><span class="p">:</span>
+</span><span class="hll">    <span class="nt">types</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">assigned</span><span class="p p-Indicator">]</span>
+</span>
+<span class="nt">jobs</span><span class="p">:</span>
+  <span class="nt">blog_issue_assigned</span><span class="p">:</span>
+<span class="hll">    <span class="nt">if</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{github.event.issue.labels[0].name == &#39;documentation.blog&#39;}}</span>
+</span>    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Blog Issue Assigned</span>
+
+    <span class="nt">runs-on</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+    <span class="nt">strategy</span><span class="p">:</span>
+      <span class="nt">matrix</span><span class="p">:</span>
+        <span class="nt">python-version</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">3.8</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+</td></tr></table>
+<p>Now we can use that templated information within a linux environment to take us into phase 2 of our automation workflow. 
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Generate Blog Entry and Clean Up</span>
+  <span class="nt">run</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+<span class="hll">    <span class="no">echo &quot;${{github.event.issue.body}}&quot; &gt; src/config.yml</span>
+</span>    <span class="no">cat src/config.yml</span>
+</code></pre></div>
+</td></tr></table></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The job for building a new blog entry only runs if the issue that triggered the GitHub workflow has a label of <code>documentation.blog</code>.</p>
+</div>
+<h3 id="automating-boilerplate-code">Automating Boilerplate Code</h3>
+<figure>
+  <img src="../img/2021-07-17-issue-filled.drawio.svg" />
+  <figcaption>Figure 3 - Filled out issue </figcaption>
+</figure>
+
+<p>With a brand new issue created, for a moment assume we had to manually create this new blog entry. For our blog, we're using <a href="https://www.mkdocs.org/">mkdocs</a>. We would need to spend valuable time adding the following to our directory structure:</p>
+<ul>
+<li>New <code>.md</code> file under the blog directory</li>
+<li>Type the file name with the correct naming convention</li>
+<li>Add the new file to the <code>mkdocs.yml</code> file's <code>nav</code> definition</li>
+</ul>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>.
+├── docs
+.   .
+.   .
+.   .
+│   ├── blog
+<span class="hll">│   │   ├── <span class="m">2021</span>-07-17-automating-docs-as-code.md
+</span>│   │   └── readme.md
+│   └── index.md
+└── mkdocs.yml
+</code></pre></div>
+</td></tr></table>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">nav</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">Home</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">index.md</span>
+  <span class="p p-Indicator">-</span> <span class="nt">About</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">about.md</span>
+  <span class="p p-Indicator">-</span> <span class="nt">Blogs</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">Content</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">blog/readme.md</span>
+<span class="hll">    <span class="p p-Indicator">-</span> <span class="nt">2021</span><span class="p">:</span>
+</span><span class="hll">      <span class="p p-Indicator">-</span> <span class="nt">Automating Docs as Code</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">blog/2021-07-17-automating-docs-as-code.md</span>
+</span></code></pre></div>
+</td></tr></table>
+<p>These steps may appear small and low effort, but over time they accumulate and become the annoyances that cause one to avoid capturing documentation all together. We're going to address this by using some python code.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The code referenced in this post are snippets of the <a href="https://github.com/jbold569/profile/tree/main/src/profile_builder">profile_builder</a> module used to create it. The entire module is outside of the scope of this discussion, but feel free to explore how the profile_builder works under the hood as an exercise.  </p>
+</div>
+<p>The logic of the <code>profile_builder</code> is straightforward:</p>
+<ul>
+<li>Load our config file as a dictionary, <code class="highlight"><span class="n">builder</span><span class="p">()</span></code></li>
+<li>Load the appropriate template file (based on the blog type), <code class="highlight"><span class="n">generate_blog</span><span class="p">(</span><span class="o">...</span><span class="p">)</span></code></li>
+<li>Create the filenames and output directories based on date and config parameters, lines 5-8</li>
+</ul>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c1"># Perform the initial build</span>
+<span class="c1"># Build the .md file and write to blog directory</span>
+<span class="c1"># templates - directory location of &quot;.j2&quot; files</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">builder</span><span class="p">()</span>        
+<span class="n">config</span><span class="p">[</span><span class="s1">&#39;publish_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+<span class="n">template_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">templates</span><span class="si">}</span><span class="s2">/blog-post-</span><span class="si">{</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.md.j2&quot;</span>
+<span class="n">blog_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;publish_date&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">%Y-%m-%d</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">slugify</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">.md&quot;</span>
+<span class="n">dest_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">blog_filename</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">generate_blog</span><span class="p">(</span><span class="n">template_file</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">dest_file</span><span class="p">)</span>
+</code></pre></div>
+</td></tr></table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice that we've parameterized the template filename using the type variable from the issue config.
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="n">template_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">templates</span><span class="si">}</span><span class="s2">/blog-post-</span><span class="si">{</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.md.j2&quot;</span>
+</code></pre></div>
+</td></tr></table></p>
+</div>
+<p><a href="https://jinja.palletsprojects.com/en/3.0.x/templates/">Jinja</a> is a great template engine for programmatically creating documents. Because blogs are pretty much rinse and repeat of the same formatting, why should we spend the time typing it out every time (or even copy pasting for that matter)? Jinja allows us to use the dict elements in our <code>config</code> variable to populate the <code>{{...}}</code> expression fields of our template. Once generated, our new entry is written to the <code>dest_file</code> directory.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="x">&lt;div id=&quot;banner&quot; class=&quot;page-image&quot;&gt;</span>
+<span class="x">    &lt;img src=&quot;../img/</span><span class="cp">{{</span> <span class="nv">publish_date.strftime</span><span class="o">(</span><span class="s1">&#39;%Y-%m-%d&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="x">-blog-banner.drawio.svg&quot; alt=&quot;&quot;&gt;</span>
+<span class="x">    &lt;div class=&quot;page-image-caption&quot;&gt;</span>
+<span class="x">        &lt;p&gt;</span>
+<span class="x">            &lt;a href=&quot;&quot;&gt;AUTHOR&lt;/a&gt;</span>
+<span class="x">        &lt;/p&gt;</span>
+<span class="x">    &lt;/div&gt;</span>
+<span class="x">&lt;/div&gt;</span>
+
+<span class="x">&lt;!-- Reposition the banner image on top --&gt;</span>
+<span class="x">&lt;script&gt;</span>
+<span class="x">    var article = document.getElementsByTagName(&quot;article&quot;)[0];</span>
+<span class="x">    article.insertBefore(document.getElementById(&quot;banner&quot;), article.childNodes[0]);</span>
+<span class="x">&lt;/script&gt;</span>
+
+<span class="x"># </span><span class="cp">{{</span> <span class="nv">title</span> <span class="cp">}}</span><span class="x"></span>
+
+<span class="cp">{{</span> <span class="nv">publish_date.strftime</span><span class="o">(</span><span class="s1">&#39;%Y %b %d&#39;</span><span class="o">)</span> <span class="cp">}}</span><span class="x"> by [Jason Bolden](../about.md)</span>
+
+
+<span class="cp">{{</span> <span class="nv">summary</span> <span class="cp">}}</span><span class="x"></span>
+
+<span class="x">## Objective</span>
+<span class="x">## Steps</span>
+<span class="x">## Conclusion</span>
+<span class="x">## References</span>
+</code></pre></div>
+</td></tr></table>
+<p>Lastly, we need to update <code>mkdocs.yml</code> file to include our new <code>2021-07-17-automating-docs-as-code.md</code> file.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c1"># get the relative path from within the docs directory</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dest_file</span><span class="p">)</span>
+<span class="n">entry</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span> 
+
+<span class="c1"># Update the mkdocs.yml file nav with the new structure</span>
+<span class="n">mkdocs_config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="n">mkdocs_file</span><span class="p">)</span>
+<span class="n">update_blog</span><span class="p">(</span><span class="n">mkdocs_config</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;publish_date&#39;</span><span class="p">],</span> <span class="p">{</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]:</span> <span class="nb">str</span><span class="p">(</span><span class="n">entry</span><span class="p">)})</span>
+</code></pre></div>
+</td></tr></table>
+<h3 id="automating-dev-prep">Automating Dev Prep</h3>
+<p>We're almost done. The only thing remaining is to stitch our <code>profile_builder</code> into our <code>issues_automation</code> workflow and create our development branch. Again, we could create a new branch manually and run the <code>profile_builder</code> module from the command line on a our local, but where's the fun in that?</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create new Blog Branch</span>
+  <span class="nt">run</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+    <span class="no">git checkout -b ${{BRANCH_NAME}}</span>
+</code></pre></div>
+</td></tr></table>
+<p><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Generate Blog Entry and Clean Up</span>
+  <span class="nt">run</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+    <span class="no">echo &quot;${{github.event.issue.body}}&quot; &gt; src/config.yml</span>
+    <span class="no">cat src/config.yml</span>
+    <span class="no">cd src</span>
+    <span class="no">python -m profile_builder blog -t ./templates -o ../docs/blog -c ./config.yml -v</span>
+    <span class="no">rm config.yml</span>
+<span class="hll">    <span class="no">cd ..</span>
+</span><span class="hll">    <span class="no">git config user.name github-actions</span>
+</span><span class="hll">    <span class="no">git config user.email github-actions@github.com</span>
+</span><span class="hll">    <span class="no">git add .</span>
+</span><span class="hll">    <span class="no">git commit -m &quot;generated ${{BRANCH_NAME}}&quot;</span>
+</span><span class="hll">    <span class="no">git push --set-upstream origin ${{BRANCH_NAME}}</span>
+</span></code></pre></div>
+</td></tr></table>
+This code snippet builds on our GitHub Workflow step from <a href="#automating-inception">phase 1</a>. All we're doing is scripting out the actions previously described in bash. To kick the whole thing off, simply create a new <code>Blog</code> issue, fill in the details, assign it to yourself, and switch to the newly created blog branch.</p>
+<figure>
+  <img src="../img/2021-07-17-action-output.drawio.svg" />
+  <figcaption>Figure 4 - Completed Action workflow following issue assignment</figcaption>
+</figure>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>At first glance, this may seem like overkill for a simple blog. A Wordpress or Squarespace site would be much easier to put together. So instead, let's think about a repo that holds engineering artifacts for the application your team supports. Or how about a knowledge base of training material for your team of developers. Incident response playbooks for your Security Operations Center, IT Help Desk procedures, etc.</p>
+<p>This workflow allows for someone to suggest an addition to the team's documentation, and automate a lot of the repetitive actions that demotivates the individual from creating the documentation in the first place. In addition to the bonus of treating the docs as managed source code, the GitHub repo facilitates a collaborative environment so documentation is less likely to be created in a vacuum without peer review.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://www.docslikecode.com/">Docs Like Code</a></li>
+<li><a href="https://jinja.palletsprojects.com/en/3.0.x/">Jinja</a></li>
+<li><a href="https://www.mkdocs.org/">MkDocs</a></li>
+<li><a href="https://docs.github.com/en/actions">GitHub Actions</a></li>
+<li><a href="https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository">GitHub Issues</a></li>
+<li><a href="https://yaml.org/">YAML</a></li>
+</ul>
+                
+                  
+                
+              
+              
+                
+
+  
+
+
+  <h2 id="__comments">Comments</h2>
+  <div id="disqus_thread"></div>
+  <script>var script,disqus_config=function(){this.page.url="https://jbold569.github.io/profile/blog/2021-07-17-automating-docs-as-code.html",this.page.identifier="blog/2021-07-17-automating-docs-as-code.html"};"undefined"==typeof DISQUS?((script=document.createElement("script")).async=!0,script.src="https://jbold569.disqus.com/embed.js",script.setAttribute("data-timestamp",Date.now()),document.body.appendChild(script)):DISQUS.reset({reload:!0,config:disqus_config})</script>
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="2021-07-25-agent-based-logging.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Agent Based Logging" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Agent Based Logging
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+      <a href="https://www.linkedin.com/in/jason-bolden-37b55443/" target="_blank" rel="noopener" title="Jason Bolden on LinkedIn" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.b1047164.min.js"></script>
+      
+    
+  </body>
+</html>

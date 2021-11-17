@@ -1,0 +1,1072 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="In short, I don't like the free version of Disqus. Ads serve a purpose in this world, and they often allow us to enjoy a lot of valuable content at the cost of a portion of our attention. However, I don't want them on my blog. Instead, let's leverage some of the native functionality of GitHub and create a Discussion thread when a new post is published to the blog; all automated, of course.">
+      
+      
+      
+        <meta name="author" content="Jason Bolden">
+      
+      
+        <link rel="canonical" href="https://jbold569.github.io/profile/blog/2021-11-02-hello-github-discussions-goodbye-disqus.html">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
+    
+    
+      
+        <title>Hello, GitHub Discussions! Goodbye, Disqus... - Jason Bolden</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.a57b2b03.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../stylesheets/custom.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hello-github-discussions-goodbye-disqus" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="Jason Bolden" class="md-header__button md-logo" aria-label="Jason Bolden" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jason Bolden
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Hello, GitHub Discussions! Goodbye, Disqus...
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/jbold569/profile/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jbold569/profile
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../index.html" class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../about.html" class="md-tabs__link">
+      About
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="readme.html" class="md-tabs__link md-tabs__link--active">
+        Blogs
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Jason Bolden" class="md-nav__button md-logo" aria-label="Jason Bolden" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Jason Bolden
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/jbold569/profile/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jbold569/profile
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about.html" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Blogs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Blogs" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Blogs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="readme.html" class="md-nav__link">
+        Content
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          2021
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="2021" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          2021
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2021-11-17-introducing-dochive.html" class="md-nav__link">
+        Introducing, DocHive!
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Hello, GitHub Discussions! Goodbye, Disqus...
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="2021-11-02-hello-github-discussions-goodbye-disqus.html" class="md-nav__link md-nav__link--active">
+        Hello, GitHub Discussions! Goodbye, Disqus...
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objective" class="md-nav__link">
+    Objective
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-breakdown" class="md-nav__link">
+    The Breakdown
+  </a>
+  
+    <nav class="md-nav" aria-label="The Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#github-discussions-graphql-api" class="md-nav__link">
+    GitHub Discussions GraphQL API
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-graphql-action" class="md-nav__link">
+    GitHub GraphQL Action
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comment" class="md-nav__link">
+    Comment
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2021-07-25-agent-based-logging.html" class="md-nav__link">
+        Agent Based Logging
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="2021-07-17-automating-docs-as-code.html" class="md-nav__link">
+        Automating Docs as Code
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objective" class="md-nav__link">
+    Objective
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-breakdown" class="md-nav__link">
+    The Breakdown
+  </a>
+  
+    <nav class="md-nav" aria-label="The Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#github-discussions-graphql-api" class="md-nav__link">
+    GitHub Discussions GraphQL API
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-graphql-action" class="md-nav__link">
+    GitHub GraphQL Action
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comment" class="md-nav__link">
+    Comment
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/jbold569/profile/edit/main/docs/blog/2021-11-02-hello-github-discussions-goodbye-disqus.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <div id="banner" class="page-image">
+    <img src="../img/2021-11-02-blog-banner.drawio.svg" alt="">
+    <div class="page-image-caption">
+        <p>
+            <a href="">AUTHOR</a>
+        </p>
+    </div>
+</div>
+
+<!-- Reposition the banner image on top -->
+<script>
+    var article = document.getElementsByTagName("article")[0];
+    article.insertBefore(document.getElementById("banner"), article.childNodes[0]);
+</script>
+
+<h1 id="hello-github-discussions-goodbye-disqus">Hello, GitHub Discussions! Goodbye, Disqus...</h1>
+<p><em>Posted by <a href="../about.html">Jason Bolden</a> on Nov 02, 2021</em></p>
+<p>In short, I don't like the free version of Disqus. Ads serve a purpose in this world, and they often allow us to enjoy a lot of valuable content at the cost of a portion of our attention. However, I don't want them on my blog. Instead, let's leverage some of the native functionality of GitHub and create a Discussion thread when a new post is published to the blog; all automated, of course.</p>
+<h2 id="objective">Objective</h2>
+<p>Referencing the previous post on <a href="./2021-07-17-automating-docs-as-code.html">Documentation Automation</a>, we intend to make a minor change to the existing flow. The reason why one would want to do this is to further consolidate the developer experience by adding a forum for collaborative communication linked to published content within the project.</p>
+<figure>
+  <img src="../img/2021-11-02-conceptual.drawio.svg"/>
+  <figcaption>Figure 1 - Conceptual Flow</figcaption>
+</figure>
+
+<h2 id="the-breakdown">The Breakdown</h2>
+<p>We'll start by explaining all the pieces necessary to add the new automation steps and tie them all together in the end.</p>
+<h3 id="github-discussions-graphql-api">GitHub Discussions GraphQL API</h3>
+<p>GitHub recently released their <a href="https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions">GraphQL API for Discussions</a>. For our workflow, we want to create a new Discussion when a new Blog Post issue is assigned. To figure out how to programmatically do this, let's reference the docs and leverage the <a href="https://docs.github.com/en/graphql/overview/explorer">GitHub GraphQL Explorer</a>.</p>
+<figure>
+  <img src="../img/2021-11-02-graphql-explorer.drawio.svg"/>
+  <figcaption>Figure 2 - GitHub GraphQL Explorer</figcaption>
+</figure>
+
+<p>The details behind GraphQL fall outside the scope of this post; however GitHub provides a nice <a href="https://docs.github.com/en/graphql/guides/introduction-to-graphql">overview</a> on their docs site. The calls we need to perform are as follows:</p>
+<ol>
+<li><code>query</code> for the repositoryId and categoryId we want to assign the new discussion</li>
+<li><code>mutation</code> to create the new discussion</li>
+</ol>
+<figure>
+  <img src="../img/2021-11-02-graphql-query.drawio.svg"/>
+  <figcaption>Figure 3 - GraphQL DiscussionCategories Query</figcaption>
+</figure>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>query DiscussionCategory {
+<span class="hll">    repository(name: &quot;profile&quot;, owner: &quot;jbold569&quot;) {
+</span>        discussionCategories(first: 10) {
+            nodes {
+<span class="hll">                name
+</span><span class="hll">                id
+</span>            }
+        }
+        id
+    }
+}
+</code></pre></div>
+</td></tr></table>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;repository&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;discussionCategories&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;nodes&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Announcements&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;DIC_kwDOFjAb884B_pJC&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;General&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;DIC_kwDOFjAb884B_pJD&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Q&amp;A&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;DIC_kwDOFjAb884B_pJE&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ideas&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;DIC_kwDOFjAb884B_pJF&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Show and tell&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;DIC_kwDOFjAb884B_pJG&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Polls&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;DIC_kwDOFjAb884B_pJH&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Blog&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;DIC_kwDOFjAb884B_pOx&quot;</span>
+                <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;MDEwOlJlcG9zaXRvcnkzNzIyNTE2MzU=&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</td></tr></table>
+<p>The GraphQL explorer returns a JSON payload with information required for the next step. Without this step, The Mutation call wouldn't know which repository to create the new Discussion in nor what category to assign it.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>mutation CreateDiscussion {
+  __typename
+<span class="hll">  createDiscussion(input: {repositoryId: &quot;MDEwOlJlcG9zaXRvcnkzNzIyNTE2MzU=&quot;, title: &quot;Explorer Test&quot;, body: &quot;This is a discussion made via the GraphQL Explorer!&quot;, categoryId: &quot;DIC_kwDOFjAb884B_pOx&quot;, clientMutationId: &quot;&quot;}) {
+</span>    discussion {
+<span class="hll">      number
+</span>    }
+  }
+}
+</code></pre></div>
+</td></tr></table>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;__typename&quot;</span><span class="p">:</span> <span class="s2">&quot;Mutation&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;createDiscussion&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;discussion&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;number&quot;</span><span class="p">:</span> <span class="mi">15</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</td></tr></table>
+<figure>
+  <img src="../img/2021-11-02-explorer-discussion.drawio.svg"/>
+  <figcaption>Figure 4 - Discussion created with GraphQL</figcaption>
+</figure>
+
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>On line 5 of the mutation snippet, we specified to return the value of the <code>number</code> field for the new discussion. Having the discussion number will be useful in a later enhancement to this flow. I'll expand more on this at the conclusion of this post.</p>
+</div>
+<h3 id="github-graphql-action">GitHub GraphQL Action</h3>
+<p>Now that we've establish what API calls we need to make the discussion and tested them manually, let's build out the automation to add this to our pipeline. The steps we want to inject into our workflow are as follows:</p>
+<figure>
+  <img src="../img/2021-11-02-action-workflow.drawio.svg"/>
+  <figcaption>Figure 6 - New action steps</figcaption>
+</figure>
+
+<p><a href="https://docs.github.com/en/rest/overview/libraries">Octokit</a> maintains a repo, <a href="https://github.com/octokit/graphql-action">graphql-action</a>, that allows you to make calls to the GitHub GraphQL API via a GitHub Action. At this time, it's limited to only GraphQL queries, so we'll also explore how to make calls using cURL for the mutation portion.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Query GraphQL for Ids</span>
+  <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">octokit/graphql-action@v2.x</span>
+  <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">get_ids</span>
+  <span class="nt">with</span><span class="p">:</span>
+    <span class="nt">query</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+<span class="hll">      <span class="no">query ids($owner:String!,$repo:String!) { </span>
+</span>        <span class="no">repository(owner:$owner,name:$repo) {</span>
+          <span class="no">discussionCategories(first: 10) {</span>
+            <span class="no">nodes {</span>
+              <span class="no">name</span>
+              <span class="no">id</span>
+            <span class="no">}</span>
+          <span class="no">}</span>
+          <span class="no">id</span>
+        <span class="no">}</span>
+      <span class="no">}</span>
+<span class="hll">    <span class="nt">owner</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ github.event.repository.owner.login }}</span>
+</span><span class="hll">    <span class="nt">repo</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ github.event.repository.name }}</span>
+</span>  <span class="nt">env</span><span class="p">:</span>
+    <span class="nt">GITHUB_TOKEN</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
+</code></pre></div>
+</td></tr></table>
+<p>The <code>octokit/graphql-action</code> allows us to basically copy/paste the query we developed in the explorer with the exception of defining the variables and their types being passed to the query; similar to a function definition. Lines 17 and 18 pull the repository name and owner login from the action event object rather than hardcoded values seen previously.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The <code>octokit/graphql-action</code> documentation references the use of <code>github.event.repository.owner.name</code>. That value is not present in the webhook event <a href="https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#webhook-payload-object-common-properties">payload object</a>. It should be <code>github.event.repository.owner.login</code></p>
+</div>
+<p>The question now is, how do we pull the Id's from the json returned by the initial query? Introducing, <a href="https://stedolan.github.io/jq/">jq</a>. <code>jq</code> is a handy command-line utility that makes processing JSON a easier. We're going to use it to extract the Id's and assign them to <a href="https://docs.github.com/en/actions/learn-github-actions/workflow-commands-for-github-actions#setting-an-environment-variable">environment variables</a> for our next workflow step.</p>
+<figure>
+  <img src="../img/2021-11-02-jqplay.drawio.svg"/>
+  <figcaption>Figure 5 - jqplay query builder output</figcaption>
+</figure>
+
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Extract Ids</span>
+  <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">extract_ids</span>
+  <span class="nt">env</span><span class="p">:</span>
+    <span class="nt">JSON_DATA</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ steps.get_ids.outputs.data}}</span>
+  <span class="nt">run</span><span class="p">:</span> <span class="p p-Indicator">&gt;</span>
+<span class="hll">    <span class="no">echo &quot;repositoryId=$(echo ${JSON_DATA} | jq &#39;.repository.id&#39;)&quot; &gt;&gt; $GITHUB_ENV</span>
+</span><span class="hll">    <span class="no">echo &quot;categoryId=$(echo ${JSON_DATA} | jq &#39;.repository.discussionCategories.nodes[] | select(.name == &quot;Blog&quot;) | .id&#39;)&quot; &gt;&gt; $GITHUB_ENV</span>
+</span></code></pre></div>
+</td></tr></table>
+<p>At the time of writing, the <code>octokit/graphql-action</code> action did not support mutations 😢. Luckily there's a fallback. The GitHub GraphQL API can be queried using <a href="https://docs.github.com/en/github-ae@latest/graphql/guides/forming-calls-with-graphql#communicating-with-graphql">http requests</a>. Knowing this, we can instead form a JSON payload containing our mutation statement and send it via cURL. It's messy (lots of debugging escape-characters), but it gets the job done.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Create Discussion cURL</span>
+  <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">create_discussion</span>
+  <span class="nt">run</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+    <span class="no">curl -H &quot;Authorization: bearer ${{env.GITHUB_TOKEN }}&quot; -X POST -d &quot; \</span>
+    <span class="no">{ \</span>
+    <span class="no">\&quot;query\&quot;: \&quot;mutation { createDiscussion(input: {repositoryId: \\\&quot;${{ env.repositoryId }}\\\&quot;, title: \\\&quot;${{ env.title }}\\\&quot;, body: \\\&quot;${{ env.body }}\\\&quot;, categoryId: \\\&quot;${{ env.categoryId }}\\\&quot;}) { discussion { number } } }\&quot; \</span>
+    <span class="no">} \</span>
+    <span class="no">&quot; https://api.github.com/graphql</span>
+
+  <span class="nt">env</span><span class="p">:</span>
+    <span class="nt">GITHUB_TOKEN</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
+    <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ github.event.issue.title }}</span>
+    <span class="nt">body</span><span class="p">:</span> <span class="s">&quot;This</span><span class="nv"> </span><span class="s">discussion</span><span class="nv"> </span><span class="s">was</span><span class="nv"> </span><span class="s">made</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">GitHub</span><span class="nv"> </span><span class="s">Actions&quot;</span>
+</code></pre></div>
+</td></tr></table>
+<figure>
+  <img src="../img/2021-11-02-github-action-discussion.drawio.svg"/>
+  <figcaption>Figure 6 - Discussion create by the 3 new action steps</figcaption>
+</figure>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>We'll stop here for the scope of this post. There are some other things that could be added to further enhance the automation:</p>
+<ul>
+<li>Inject the url to the new discussion in the <code>profile_builder</code> module so it can be added to the new blog post template automatically. Discussions urls match the pattern: <code>/&lt;owner&gt;/&lt;repository&gt;/discussions/&lt;discussion_number&gt;</code> (recall that we purposefully captured that number after the mutation call)</li>
+<li>Programmatically add the link to the new Blog Post to the Discussion Body. </li>
+<li>Assign different discussion categories or use a different body template based on issue labels</li>
+</ul>
+<p>Let's take a look at the bigger picture for a second. <a href="https://youtu.be/IpBw2SJkFyk">Discussions</a> were created to facilitate collaborative communication about a project. Assuming you're a maintainer for a project on GitHub and you have a project site for publishing posts, tying these posts to a discussion just makes sense if you value community around your product. The bonus here being, Discussions are built into the GitHub ecosystem and are tied directly to your project. Fewer dependencies, less context switching, it's awesome! </p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions">GitHub GraphQL API for Discussions</a></li>
+<li><a href="https://docs.github.com/en/graphql/guides/introduction-to-graphql">GitHub GraphQL Intro</a></li>
+<li><a href="https://jqplay.org/">jq</a></li>
+<li><a href="https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads">GitHub Webhook Events and Payloads</a></li>
+<li><a href="https://docs.github.com/en/github-ae@latest/graphql/guides/forming-calls-with-graphql#communicating-with-graphql">GitHub GraphQL cURL</a></li>
+</ul>
+<h2 id="comment">Comment</h2>
+<p>Continue the discussion <a href="https://github.com/jbold569/profile/discussions/19">here</a>!</p>
+                
+                  
+                
+              
+              
+                
+
+  
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="2021-11-17-introducing-dochive.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Introducing, DocHive!" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Introducing, DocHive!
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="2021-07-25-agent-based-logging.html" class="md-footer__link md-footer__link--next" aria-label="Next: Agent Based Logging" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Agent Based Logging
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+      <a href="https://www.linkedin.com/in/jason-bolden-37b55443/" target="_blank" rel="noopener" title="Jason Bolden on LinkedIn" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.b1047164.min.js"></script>
+      
+    
+  </body>
+</html>
