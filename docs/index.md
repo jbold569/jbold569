@@ -21,6 +21,18 @@ hide:
     
     <div class="card" style="width: 15rem;">
         <div class="card-img">
+            <img src="./img/2021-11-17-blog-banner.drawio.svg" alt="Introducing, DocHive!">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Introducing, DocHive!</h5>
+            <h6 class="card-subtitle">November 17, 2021</h6>
+            <p class="card-text">After reusing the  code, powering this blog, across multiple projects, a definite pattern has come to light. At its core, this python module takes a list of key/value pairs as input, populates a docum...</p>
+            <a href="./blog/2021-11-17-introducing-dochive.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
+        </div>
+    </div>
+    
+    <div class="card" style="width: 15rem;">
+        <div class="card-img">
             <img src="./img/2021-11-02-blog-banner.drawio.svg" alt="Hello, GitHub Discussions! Goodbye, Disqus...">
         </div>
         <div class="card-body">
@@ -40,18 +52,6 @@ hide:
             <h6 class="card-subtitle">July 25, 2021</h6>
             <p class="card-text">Whether you're working in site reliability, business intelligence, or security, one thing rings true. Logs are king. They are a window into your operations, providing insights into access, change, per...</p>
             <a href="./blog/2021-07-25-agent-based-logging.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
-        </div>
-    </div>
-    
-    <div class="card" style="width: 15rem;">
-        <div class="card-img">
-            <img src="./img/2021-07-17-blog-banner.drawio.svg" alt="Automating Docs as Code">
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Automating Docs as Code</h5>
-            <h6 class="card-subtitle">July 17, 2021</h6>
-            <p class="card-text">This may be an unpopular opinion, but software engineers are notoriously bad at maintaining documentation. I don't believe that's any fault of our own. Moving at break-neck speeds to keep up with chan...</p>
-            <a href="./blog/2021-07-17-automating-docs-as-code.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
         </div>
     </div>
     
