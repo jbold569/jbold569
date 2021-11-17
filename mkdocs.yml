@@ -31,6 +31,7 @@ nav:
 - Blogs:
   - Content: blog/readme.md
   - 2021:
+    - Introducing, DocHive!: blog/2021-11-17-introducing-dochive.md
     - Hello, GitHub Discussions! Goodbye, Disqus...: blog/2021-11-02-hello-github-discussions-goodbye-disqus.md
     - Agent Based Logging: blog/2021-07-25-agent-based-logging.md
     - Automating Docs as Code: blog/2021-07-17-automating-docs-as-code.md
