@@ -55,7 +55,7 @@ Welcome to my collection of thoughts, lessons learned, and experiments. I've gat
         <div class="card-body">
             <h5 class="card-title">Introducing, DocHive!</h5>
             <h6 class="card-subtitle">November 17, 2021</h6>
-            <p class="card-text">After reusing the  code, powering this blog, across multiple projects, a definite pattern has come to light. At its core, this python module takes a list of key/value pairs as input, populates a docum...</p>
+            <p class="card-text">After reusing the code powering this blog across multiple projects, a definite pattern has come to light. At its core, the <a href="./2021-07-17-automating-docs-as-code.html"><code>profile_builder</code></a> module takes a list of key/value pairs as input, populates a docum...</p>
             <a href="./2021-11-17-introducing-dochive.html" class="md-button md-button--primary" style="width: max-content;">Read More</a>
         </div>
     </div>
